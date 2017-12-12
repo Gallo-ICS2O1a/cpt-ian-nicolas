@@ -1,12 +1,12 @@
 player_size = 100
-ball = PVector(800, 700)
+ball = PVector(400, 300)
 ball_size = 50
 speed = PVector(0, 0)
 score = 0
 
 
 def setup():
-    size(1600, 900)
+    size(800, 400)
 
 
 def draw():
@@ -20,13 +20,13 @@ def draw():
     # Field
     noStroke()
     fill(18, 173, 42)
-    rect(0, 400, 1600, 500)
+    rect(0, 200, 800, 200)
 
     # Net
     stroke(0)
     strokeWeight(5)
     fill(255)
-    rect(400, 200, 800, 200)
+    rect(300, 100, 200, 100)
 
     # Player
     noStroke()
@@ -53,7 +53,7 @@ def draw():
         speed.sub(player_vector)
 
     # Score Keeping
-    if ball.x >= 400 and ball.x <= 1200 and ball.y <= 400 and ball.y >= 200:
+    if ball.x >= 300 and ball.x <= 500 and ball.y <= 200 and ball.y >= 100:
         score += 1
 
     text("Score: " + str(score), 100, 100)
