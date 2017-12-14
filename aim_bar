@@ -1,0 +1,22 @@
+line_point1 = PVector(350, 390)
+line_point2 = PVector(400, 390)
+rotation = - 0.1
+
+def setup():
+    size(800, 400)
+    
+def draw():
+    global line_point1
+    global line_point2
+    global rotation
+    line(line_point1.x, line_point1.y, line_point2.x, line_point2.y)
+    
+    line_distance_vect = PVector.sub(line_point2, line_point1)
+    line_angle = line_distance_vect.heading()
+    # line_angle = int(degrees(line_angle)) 
+
+    # if line_angle < PI and line_angle > 0:
+    if line_angle < PI:
+        rotation = -rotation
+    line_distance_vect.rotate(rotation)
+    print(rotation)
