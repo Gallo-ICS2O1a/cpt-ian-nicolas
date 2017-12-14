@@ -1,6 +1,6 @@
-speed=PVector(0, 1)
+speed=PVector(0, 10)
 y=PVector(100, 100)
-y1=PVector(150, 125)
+y1=PVector(120, 125)
 y2=PVector(100, 150)
 bad=color(230, 17, 17)
 good=color(17, 230, 34)
@@ -32,3 +32,7 @@ def draw():
 def mouseClicked():
     global speed
     speed=speed.mult(0)
+    print(y2.y)
+    print(y2.y-100)
+    power=PVector(y2.y, 0, 0)
+    print(power)
