@@ -1,22 +1,38 @@
-line_point1 = PVector(350, 390)
-line_point2 = PVector(400, 390)
-rotation = - 0.1
+line_distance_vect = PVector(-50, 0)
+line_point1 = PVector(400, 390)
+rotation_speed =  -0.08
+rotation = 0
 
 def setup():
     size(800, 400)
-    
+    # frameRate(20)
+
 def draw():
     global line_point1
-    global line_point2
     global rotation
-    line(line_point1.x, line_point1.y, line_point2.x, line_point2.y)
+    global rotation_speed
+    global line_distance_vect
     
-    line_distance_vect = PVector.sub(line_point2, line_point1)
-    line_angle = line_distance_vect.heading()
-    # line_angle = int(degrees(line_angle)) 
+    background(255)
 
-    # if line_angle < PI and line_angle > 0:
-    if line_angle < PI:
-        rotation = -rotation
-    line_distance_vect.rotate(rotation)
-    print(rotation)
+    # this makes the line
+    strokeWeight(1)
+    line(line_point1.x, line_point1.y, line_point1.x + line_distance_vect.x, line_point1.y + line_distance_vect.y)
+    
+    strokeWeight(10)
+    point(line_point1.x, line_point1.y)
+    # triangle(width/2 + line_distance_vect.x, height + line_distance_vect.y, width/2 + line_distance_vect.x + 25, height + line_distance_vect.y + 25, width/2 + line_distance_vect.x - 25, height + line_distance_vect.y - 25)
+    line_angle = degrees(line_distance_vect.heading())
+    # print(line_angle)
+
+    if line_angle < -180 or line_angle > 0:
+        rotation_speed = - rotation_speed
+
+    line_distance_vect.rotate(rotation_speed)
+
+def mouseClicked():
+    global rotation_speed
+    rotation_speed = 0
+    direction_vect = PVector.fromAngle(line_distance_vect.heading())
+    ball_direction = PVector(direction_vect.x, 0, 0)
+    print(ball_direction)
