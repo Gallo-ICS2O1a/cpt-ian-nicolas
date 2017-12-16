@@ -40,5 +40,5 @@ def draw():
 def mousePressed():
     global speed
     speed = speed.mult(0)
-    power = PVector(400 - power_point.y - 25, 0, 0)
+    power = PVector(0, 400 - power_point.y - 25, 0)
     print(power)
