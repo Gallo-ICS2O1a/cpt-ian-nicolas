@@ -65,10 +65,17 @@ def draw():
 def mousePressed():
     global rotation_speed
     global line_angle
+    global line_distance_vect
     rotation_speed = 0
-    print(line_angle)
+    direction_vect = PVector.fromAngle(line_distance_vect.heading())
+    ball_direction = PVector(direction_vect.x, 0, 0)
+    print(ball_direction)
+    # print(line_angle)
     
     global speed
     speed = speed.mult(0)
     power = PVector(0, 400 - power_point.y - 25, 0)
     print(power)
+    
+    shot=power.add(ball_direction)
+    print(shot)
