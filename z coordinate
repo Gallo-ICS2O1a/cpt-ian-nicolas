@@ -1,0 +1,21 @@
+X=0
+Y=400
+Z=0
+def setup():
+    size(400, 400, P3D)
+
+def draw():
+    global X,Y,Z
+    background(0)
+    translate(width/2, Y, Z)
+    stroke(255)
+    fill(127)
+    beginShape()
+    vertex(-100, -100, -100)
+    vertex( 100, -100, -100)
+    vertex( 100,  100, -100)
+    vertex(-100,  100, -100)
+    endShape(CLOSE)
+    X+=1
+    Y-=1
+    Z+=1
