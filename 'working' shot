@@ -1,26 +1,28 @@
+# Height Bar
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(100, 100)
 height_speed = PVector(0, 10)
 
+# Aim Bar
 aim_point = PVector(400, 390)
 aim_point1 = PVector(-50, 0)
 rotation_height_speed = 0.1
 ball_pos = PVector(400, 385)
 ball_size = 30
 
-click_number = 0
-shot = PVector(0, 0, 0)
-
+# Power Bar
 power_point = PVector(700, 385)
 rect_height_point = PVector(power_point.x - 7.5, power_point.y + 15)
 rect_height_dim = PVector(15, 400 - power_point.y - 15)
 power_change = PVector(0, -1)
 
+# Shooting
+click_number = 0
+shot = PVector(0, 0, 0)
 
 def setup():
-    size(800, 400, P3D)
-    frameRate(30)
+    size(800, 500, P3D)
 
 def draw():
     global bad, good, height_point, height_speed
@@ -40,7 +42,7 @@ def draw():
     rect(100, 300, 50, 100)
 
     stroke(0)
-    strokeWeight(10)
+    strokeWeight(5)
     fill(0)
     line(height_point.x, height_point.y, height_point.x + 50, height_point.y)
     height_point.add(height_speed)
@@ -58,7 +60,7 @@ def draw():
         rotation_height_speed = -rotation_height_speed
     aim_point1.rotate(rotation_height_speed)
     
-        # Power Arrow
+    # Power Arrow
     fill(0)
     triangle(power_point.x, power_point.y, power_point.x - 25, power_point.y + 15, power_point.x + 25, power_point.y + 15)
     rect(rect_height_point.x, rect_height_point.y, rect_height_dim.x, rect_height_dim.y)
@@ -93,8 +95,9 @@ def mousePressed():
 
     elif click_number == 1:
         rotation_height_speed = 0
-        aim_point2 = PVector.fromAngle(aim_point1.heading())
-        ball_direction = PVector((aim_point2.x)*5, 0, 0)
+        aim_angle = PVector.sub(aim_point + aim_point1, aim_point)
+        # aim_point2 = PVector.fromAngle(aim_point1.heading())
+        ball_direction = PVector(aim_angle.x, 0, 0)
         print(ball_direction)
         click_number += 1
         
