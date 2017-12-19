@@ -1,11 +1,11 @@
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(100, 100)
-speed = PVector(0, 10)
+height_speed = PVector(0, 10)
 
 aim_point = PVector(400, 390)
 aim_point1 = PVector(-50, 0)
-rotation_speed = 0.1
+rotation_height_speed = 0.1
 ball_pos = PVector(400, 385)
 ball_size = 30
 
@@ -23,9 +23,9 @@ def setup():
     frameRate(30)
 
 def draw():
-    global bad, good, height_point, speed
-    global aim_point, aim_point1, rotation_speed, ball_pos, ball_size
-    global click_number, power, shot
+    global bad, good, height_point, height_speed
+    global aim_point, aim_point1, rotation_height_speed, ball_pos, ball_size
+    global click_number, shot
     global power_point, rect_height_point, rect_height_dim, power_change
 
     background(255)
@@ -43,29 +43,22 @@ def draw():
     strokeWeight(10)
     fill(0)
     line(height_point.x, height_point.y, height_point.x + 50, height_point.y)
-    height_point.add(speed)
+    height_point.add(height_speed)
     
     if height_point.y >= 400:
-        speed = speed.mult(-1)
+        height_speed = height_speed.mult(-1)
     elif height_point.y <= 100:
-        speed = speed.mult(-1)
+        height_speed = height_speed.mult(-1)
 
     # Aim Bar
     strokeWeight(1)
     line(aim_point.x, aim_point.y, aim_point.x + aim_point1.x, aim_point.y + aim_point1.y)
     line_angle = degrees(aim_point1.heading())
     if line_angle < -180 or line_angle > 0:
-        rotation_speed = -rotation_speed
-    aim_point1.rotate(rotation_speed)
+        rotation_height_speed = -rotation_height_speed
+    aim_point1.rotate(rotation_height_speed)
     
-    translate(shot.x, shot.y, shot.z)
-    beginShape()
-    ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
-    endShape(CLOSE)
-    shot.add(shot)
-    # print(ball_pos)
-    
-    # Power Bar
+        # Power Arrow
     fill(0)
     triangle(power_point.x, power_point.y, power_point.x - 25, power_point.y + 15, power_point.x + 25, power_point.y + 15)
     rect(rect_height_point.x, rect_height_point.y, rect_height_dim.x, rect_height_dim.y)
@@ -77,21 +70,29 @@ def draw():
     rect_height_dim.add(power_change)
     # print(rect_height_point)
 
+    translate(shot.x, shot.y, shot.z)
+    beginShape()
+    ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+    endShape(CLOSE)
+    shot.add(shot)
+    # print(ball_pos)
+    
+
 def mousePressed():
-    global bad, good, height_point, speed
-    global aim_point, aim_point1, rotation_speed
+    global bad, good, height_point, height_speed
+    global aim_point, aim_point1, rotation_height_speed
     global click_number, power, shot
     global ball_direction, power_change
+    global height_power
 
-    
     if click_number == 0:
-        speed = speed.mult(0)
+        height_speed = height_speed.mult(0)
         height_power = PVector(0, (-(400 - height_point.y))//25, 0)
         print(height_power)
         click_number += 1
-        
+
     elif click_number == 1:
-        rotation_speed = 0
+        rotation_height_speed = 0
         aim_point2 = PVector.fromAngle(aim_point1.heading())
         ball_direction = PVector((aim_point2.x)*5, 0, 0)
         print(ball_direction)
@@ -99,7 +100,9 @@ def mousePressed():
         
     elif click_number == 2:
         power_change=power_change.mult(0)
-        power = PVector(0, 0, power_point.y) 
-        shot = power.add(ball_direction).add(power_point)
-        # shot = shot.add(power_point)
+        power = PVector(0, 0, -(power_point.y)//10) 
         print(power)
+        shot = shot.add(height_power)
+        shot = shot.add(ball_direction)
+        shot = shot.add(power)
+        print(shot)
