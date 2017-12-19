@@ -1,142 +1,78 @@
-# I just put the two together, it is not completed
-# variables
-line_distance_vect = PVector(-50, 0)
-line_point1 = PVector(400, 385)
-rotation_speed =  -0.1
-speed = PVector(0, 10)
-power_point = PVector(100, 100)
-y1 = PVector(120, 125)
-y2 = PVector(100, 150)
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
-click_number = 0
+power_point = PVector(100, 100)
+speed = PVector(0, 10)
+
+aim_point = PVector(400, 390)
+aim_point1 = PVector(-50, 0)
+rotation_speed = 0.1
 ball_pos = PVector(400, 385)
 ball_size = 30
 
+click_number = 0
+shot = PVector(0, 0, 0)
 def setup():
-    size(800, 400)
+    size(800, 400, P3D)
+    frameRate(30)
 
 def draw():
-    global speed
-    global power_point
-    global bad
-    global good
+    global bad, good, power_point, speed
+    global aim_point, aim_point1, rotation_speed
+    global click_number, power, shot
+
     background(255)
     noStroke()
 
     # Power Bar
     fill(bad)
-    rect(100, 0, 50, 133)    
+    rect(100, 100, 50, 100)
     fill(good)
-    rect(100, 133, 50, 134)
+    rect(100, 200, 50, 100)
     fill(bad)
-    rect(100, 267, 50, 133)
-    stroke(10)
+    rect(100, 300, 50, 100)
+
+    stroke(0)
+    strokeWeight(10)
     fill(0)
-    triangle(power_point.x, power_point.y, power_point.x + 20, power_point.y + 25, power_point.x, power_point.y + 50)
-
-
-
+    line(power_point.x, power_point.y, power_point.x + 50, power_point.y)
     power_point.add(speed)
-
-
-
-    if power_point.y >= 350:
-
+    
+    if power_point.y >= 400:
+        speed = speed.mult(-1)
+    elif power_point.y <= 100:
         speed = speed.mult(-1)
 
-
-
-    elif power_point.y <= 0:
-
-
-
-        speed = speed.mult(-1)
-
-    
-
-    global line_point1
-
-    global rotation_speed
-
-    global line_distance_vect
-
-    global line_angle
-
-
-
-
-
-    # this makes the line
-
-    # print(line_distance_vect.y)
-    
-    stroke(1)
-    line(line_point1.x, line_point1.y, line_point1.x + line_distance_vect.x, line_point1.y + line_distance_vect.y)
-    
-    line_angle = degrees(line_distance_vect.heading())
-        
-        
+    # Aim Bar
+    strokeWeight(1)
+    line(aim_point.x, aim_point.y, aim_point.x + aim_point1.x, aim_point.y + aim_point1.y)
+    line_angle = degrees(aim_point1.heading())
     if line_angle < -180 or line_angle > 0:
-        
-        rotation_speed = - rotation_speed
-        
-        
-        
-    line_distance_vect.rotate(rotation_speed)
+        rotation_speed = -rotation_speed
+    aim_point1.rotate(rotation_speed)
     
-    global ball_pos
-    global ball_size
+    translate(shot.x, shot.y, shot.z)
+    beginShape()
     ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
-    if click_number == 2:
-        direction_vect = PVector.fromAngle(line_distance_vect.heading())
-        direction_vect = direction_vect.mult(-1)
-        ball_direction = PVector(direction_vect.x, 0, 0)
-        shot = power.add(ball_direction)
-        ball_pos = ball_pos.add(shot)
-        print(ball_pos)
-        
-        
-    if ball_pos.y <= 0:
-        ball_pos.y = 385
-        
-    elif ball_pos.y >= height: 
-        ball_pos.y = 385
-        
-    elif ball_pos.x <= 0:
-        ball_pos.x = 400
-        
-    elif ball_pos.x >= width: 
-        ball_pos.x = 400
-    
-
-        
+    endShape(CLOSE)
+    shot.add(shot)
+    # print(ball_pos)
 
 def mousePressed():
+    global bad, good, power_point, speed
+    global aim_point, aim_point1, rotation_speed
+    global click_number, power, shot
     
-    global click_number
-    global rotation_speed
-    global line_angle
-    global line_distance_vect
-    global speed
-    global power_point
-    global power
-    
-
     if click_number == 0:
         speed = speed.mult(0)
-        power = PVector(0, 400 - power_point.y - 25, 0)
-        power = power.mult(-1)
-        # print(power)
+        power = PVector(0, -(400 - power_point.y), 0)
+        print(power)
         click_number += 1
-
-
+        
     elif click_number == 1:
         rotation_speed = 0
-        direction_vect = PVector.fromAngle(line_distance_vect.heading())
-        # direction_vect = direction_vect.mult(-1)
-        ball_direction = PVector(direction_vect.x, 0, 0)
-        # print(ball_direction)
+        aim_point2 = PVector.fromAngle(aim_point1.heading())
+        ball_direction = PVector(aim_point2.x, 0, 0)
+        print(ball_direction)
+        click_number += 1
         shot = power.add(ball_direction)
         print(shot)
-        click_number += 1
