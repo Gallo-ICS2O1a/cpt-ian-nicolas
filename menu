@@ -69,6 +69,7 @@ def draw():
         fill(0)
         textSize(10)
         text("<-- BACK", 725, 350)
+
     # play
     if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY < 200:
         text_play = 50
@@ -128,6 +129,7 @@ def draw():
         # print(ball_pos)
     # print(play)
 
+
 def mouseClicked():
     global filler
     global instruction, play
@@ -148,7 +150,7 @@ def mouseClicked():
     if play is True:
         if mouseX > 750 and mouseX < 800 and mouseY > 0 and mouseY < 50:
             play = False
-    print(play)
+    # print(play)
 
 
 def mousePressed():
@@ -182,9 +184,10 @@ def mousePressed():
             shot = shot.add(ball_direction)
             shot = shot.add(power)
             print(shot)
+
     elif play is not True:
         height_speed = PVector(0, 10)
         rotation_height_speed = 0.1
         power_change = PVector(0, -1)
         click_number = 0
-    print(click_number)
+    # print(click_number)
