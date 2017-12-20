@@ -1,0 +1,31 @@
+instruction = 30
+play = 30
+filler = 255
+def setup():
+    size(800, 400)
+
+def draw():
+    global instruction, play, filler
+    background(filler)
+    fill(0)
+    textSize(50)
+    text("Menu:", 350, 100)
+
+    textSize(instruction)
+    text("Instructions", 100, 150)
+    textSize(play)
+    text("Play", 100, 200)
+
+    if mouseX > 100 and mouseX < 250 and mouseY > 200 and mouseY <225:
+        instruction == 100
+    else:
+        instruction == 30
+
+    if mouseX > 100 and mouseX < 150 and mouseY > 225 and mouseY <250:
+        play == 100
+    else:
+        play = 30    
+    if mousePressed:
+        filler = 0
+    else:
+        filler = 255
