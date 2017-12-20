@@ -1,11 +1,15 @@
 instruction = 30
 play = 30
 filler = 255
+text_instruction = False
+text_play = False
+
 def setup():
     size(800, 400)
 
 def draw():
     global instruction, play, filler
+    global text_instruction, text_play
     background(filler)
     fill(0)
     textSize(50)
@@ -15,17 +19,45 @@ def draw():
     text("Instructions", 100, 150)
     textSize(play)
     text("Play", 100, 200)
-
-    if mouseX > 100 and mouseX < 250 and mouseY > 200 and mouseY <225:
-        instruction == 100
+    
+    # instruction
+    if mouseX > 100 and mouseX < 270 and mouseY > 100 and mouseY <150:
+        instruction = 50
     else:
-        instruction == 30
-
-    if mouseX > 100 and mouseX < 150 and mouseY > 225 and mouseY <250:
-        play == 100
+        instruction = 30
+    if text_instruction == True:
+        background(255)
+        fill(0)
+        textSize(30)
+        text("Instructions:", 300, 80)
+        textSize(10)
+        text("These are the instructions", 100, 200)
+        fill(255)
+        rect(700, 300, 100, 100)
+        fill(0)
+        textSize(10)
+        text("<-- BACK", 725, 350)
+    # play
+    if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY <200:
+        play = 50
     else:
         play = 30    
-    if mousePressed:
-        filler = 0
+    if text_play == True:
+        background(100, 255, 10)
+
+def mouseClicked():
+    global filler
+    global text_instruction, text_play
+
+    # instructions
+    if mouseX > 100 and mouseX < 270 and mouseY > 100 and mouseY < 150:
+        text_instruction = True
+    elif mouseX > 700 and mouseX < 800 and mouseY > 300 and mouseY < 400: 
+        text_instruction = False
+    # print(text_instruction)
+
+    # play
+    if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY <200:
+        text_play = True
     else:
-        filler = 255
+        text_play = False
