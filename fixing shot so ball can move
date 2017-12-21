@@ -1,0 +1,36 @@
+ball_pos = PVector(400, 385)
+ball_size = 30
+shot=PVector(10, 10, 10)
+click = False
+def setup():
+    size(500, 500)
+    # frameRate(10)
+def draw():
+    global ball_pos, ball_size, shot, click
+    background(255)
+    if click is True:
+        # shot = PVector(10, 10, 10)
+        translate(shot.x, shot.y, shot.z)
+        beginShape()
+        # pushMatrix()
+        # translate(shot.x, shot.y, shot.z)
+        fill(100)
+        ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+        # vertex(30, 20)
+        # vertex(85, 20)
+        # vertex(85, 75)
+        # vertex(30, 75)
+        endShape(CLOSE)
+        # popMatrix()
+        shot.add(shot)
+        # print(ball_pos)
+        # print(play)
+    else:
+        shot = PVector(0, 0, 0)
+
+def mouseClicked():
+    global click, shot
+    if click is False:
+        click = True
+    elif click is True:
+        click = False
