@@ -57,7 +57,7 @@ def draw():
         text_instruction = 50
     else:
         text_instruction = 30
-        if instruction is True:
+    if instruction is True:
         background(255)
         fill(0)
         textSize(30)
