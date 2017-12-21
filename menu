@@ -57,7 +57,7 @@ def draw():
         text_instruction = 50
     else:
         text_instruction = 30
-    if instruction is True:
+        if instruction is True:
         background(255)
         fill(0)
         textSize(30)
@@ -67,8 +67,12 @@ def draw():
         fill(255)
         rect(700, 300, 100, 100)
         fill(0)
-        textSize(10)
-        text("<-- BACK", 725, 350)
+        if mouseX > 700 and mouseX < 800 and mouseY > 300 and mouseY < 400:
+            text_instruction = 15
+        else:
+            text_instruction = 10
+        textSize(text_instruction)
+        text("<-- BACK", 720, 350)
 
     # play
     if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY < 200:
