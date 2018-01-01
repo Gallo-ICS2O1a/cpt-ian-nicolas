@@ -2,83 +2,55 @@
 # Height Bar
 
 bad = color(230, 17, 17)
-
 good = color(17, 230, 34)
-
 height_point = PVector(100, 100)
-
 height_speed = PVector(0, 10)
-
 net_pos = PVector(300, 100)
-
 
 click_number = 0
 
 def setup():
-
     size(800, 400)
 
 
 def draw():
-
     global bad, good, height_point, height_speed
     global net_pos
 
     fill(255)
-        
     # net
     rect(net_pos.x, net_pos.y, 200, 100)
     
     # Height Bar
     fill(bad)
-
     rect(100, 0, 50, 200)
 
     fill(good)
-
     rect(100, 200, 50, 200)
 
     stroke(0)
-
     strokeWeight(5)
-
     fill(0)
-
     line(height_point.x, height_point.y, height_point.x + 50, height_point.y)
 
     height_point.add(height_speed)
 
-
-
     if height_point.y >= 400:
-
         height_speed = height_speed.mult(-1)
-
     elif height_point.y <= 0:
-
         height_speed = height_speed.mult(-1)
-
 
 def mousePressed():
 
     global bad, good, height_point, height_speed
-
     global aim_point, aim_point1, rotation_height_speed
-
     global click_number, power, shot
-
     global ball_direction, power_change
-
     global height_power
-
     global text_play
 
     if click_number == 0:
-
         height_speed = height_speed.mult(0)
-
         height_power = PVector(0, (-(400 - height_point.y))//2, 0)
-
         print(height_power)
-
         click_number += 1
