@@ -1,0 +1,110 @@
+# Power Bar
+power_point = PVector(700, 400)
+rect_height_point = PVector(power_point.x - 7.5, power_point.y + 15)
+rect_height_dim = PVector(15, 415 - power_point.y - 15)
+power_change = PVector(0, 1)
+
+# Height Bar
+bad = color(230, 17, 17)
+good = color(17, 230, 34)
+height_point = PVector(100, 100)
+height_speed = PVector(0, 10)
+net_pos = PVector(300, 100)
+
+click_number = 0
+ball_pos = PVector(400, 385)
+ball_size = 30
+ball_d_counter = 0
+def setup():
+    size(800, 500)
+    
+
+def draw():
+    global click_number
+    global power_point, rect_height_point, rect_height_dim, power_change
+    global ball_d_counter
+    
+    background(255)
+    
+    # Power Arrow
+
+    fill(0)
+    triangle(power_point.x, power_point.y, power_point.x - 25, power_point.y + 15, power_point.x + 25, power_point.y + 15)
+    rect(rect_height_point.x, rect_height_point.y, rect_height_dim.x, rect_height_dim.y)
+    
+    if power_point.y <= 0 or power_point.y >= 400:
+    
+        power_change = power_change.mult(-1)
+    
+            
+    power_point.add(power_change)
+    rect_height_dim = PVector(15, -(415 - power_point.y - 15))
+    
+    
+
+    global bad, good, height_point, height_speed
+    global net_pos
+
+    fill(255)
+    # net
+    rect(net_pos.x, net_pos.y, 200, 100)
+    
+    # Height Bar
+    fill(bad)
+    rect(100, 0, 50, 200)
+
+    fill(good)
+    rect(100, 200, 50, 200)
+
+    stroke(0)
+    strokeWeight(5)
+    fill(0)
+    line(height_point.x, height_point.y, height_point.x + 50, height_point.y)
+
+    height_point.add(height_speed)
+
+    if height_point.y >= 400:
+        height_speed = height_speed.mult(-1)
+    elif height_point.y <= 0:
+        height_speed = height_speed.mult(-1)
+    
+    print(power_point.y)
+    # fill(0) 
+    # ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+    # if power_point.y > 200:
+    #     if ball_pos.y > 185:
+    #         ball_pos.y -= 1
+        
+       
+    fill(0) 
+    ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+    
+def mousePressed():
+    global bad, good, height_point, height_speed
+    global aim_point, aim_point1, rotation_height_speed
+    global click_number, power, shot, power_point
+    global ball_direction, power_change
+    global height_power
+    global text_play
+    global ball_pos, ball_size
+
+    
+    if click_number == 0:
+        height_speed = height_speed.mult(0)
+        height_power = PVector(0, (-(400 - height_point.y))//2, 0)
+        print(height_power)
+        click_number += 1
+    elif click_number == 1:
+        power_change = power_change.mult(0)
+        power = PVector(0, rect_height_dim.y)
+        print(power)
+        click_number += 1
+        if power_point.y < 200:
+            while ball_pos.y > 185:
+                ball_pos.y -= 0.1
+                print(ball_pos.y)
+                fill(0) 
+                ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+            
+
+    
