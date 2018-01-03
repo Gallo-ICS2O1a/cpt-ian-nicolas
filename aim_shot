@@ -1,0 +1,85 @@
+# Aim Bar
+aim_point = PVector(400, 390)
+aim_vector = PVector(-50, 0)
+rotation_height_speed = 0.007
+min_aim_point = 350 # minimum x coordinate that the aim line can reach
+min_shot_point = 0 # minimum x coordinate that the shot can end up at
+max_aim_point = 450 # maximum x coorinate that the aim line can reach
+max_shot_point = 800 # maxiumum x cooridnate that the aim line can end up t\at
+
+click_number = 0
+power_status = False
+height_status = False
+power_location = 183 # 183 is the y location of where the power will make the ball stop
+ball_pos = PVector(400, 385)
+ball_size = 30
+net_pos = PVector(300, 100)
+bad = color(230, 17, 17)
+good = color(17, 230, 34)
+good_aim_rect_pos = PVector(388.125, 340)
+bad_aim_rect_pos1 = PVector(350, 340)
+bad_aim_rect_pos2 = PVector(411.875, 340)
+
+
+def setup():
+    size(800, 500)
+
+def draw():
+    global bad, good, height_point, height_speed
+    global aim_point, aim_vector, rotation_height_speed, ball_pos, ball_size
+    global click_number, shot
+    global power_point, rect_height_point, rect_height_dim, power_change
+    global bad_aim_rect_pos1, good_aim_rect_pos, bad_aim_rect_pos2
+
+    background(255)
+
+     # net
+    fill(255)
+    stroke(0)
+    strokeWeight(2)
+    rect(net_pos.x, net_pos.y, 200, 100)
+    
+    # Aim boundary good
+    fill(good)
+    noStroke()
+    rect(good_aim_rect_pos.x, good_aim_rect_pos.y, 23.75, 60)
+    
+    # Aim boundary bad 1
+    fill(bad)
+    noStroke()
+    rect(bad_aim_rect_pos1.x, bad_aim_rect_pos1.y, 38.125, 60)
+    
+    # Aim boundary bad 2
+    fill(bad)
+    noStroke()
+    rect(bad_aim_rect_pos2.x, bad_aim_rect_pos2.y, 38.125, 60)
+    
+    # Aim Line
+    stroke(0)
+    strokeWeight(2)
+    line(aim_point.x, aim_point.y, aim_point.x + aim_vector.x, aim_point.y + aim_vector.y)
+    line_angle = degrees(aim_vector.heading())
+    if line_angle < -180 or line_angle > 0:
+        rotation_height_speed = -rotation_height_speed
+    aim_vector.rotate(rotation_height_speed)
+
+    fill(0) 
+    ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+
+def mousePressed():
+    global bad, good, height_point, height_speed
+    global aim_point, aim_vector, rotation_height_speed
+    global click_number, power, shot
+    global ball_direction, power_change
+    global height_power
+    global min_aim_point, min_shot_point, max_shot_point, max_aim_point
+    
+    if click_number == 0:
+        rotation_height_speed = 0
+        aim_x = 400 + aim_vector.x
+        print(aim_x)
+        aim = (aim_x - min_aim_point)*((aim_point.x - min_shot_point)/(aim_point.x - min_aim_point))
+        print(aim)
+
+        click_number += 1
+        
