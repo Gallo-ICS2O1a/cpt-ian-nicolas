@@ -9,7 +9,7 @@ bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(100, 100)
 height_speed = PVector(0, 5)
-net_pos = PVector(300, 100)
+net_pos = PVector(299, 100)
 
 click_number = 0
 ball_pos = PVector(400, 385)
@@ -55,7 +55,7 @@ def draw():
     # net
     stroke(0)
     strokeWeight(2)
-    rect(net_pos.x, net_pos.y, 200, 100)
+    rect(net_pos.x, net_pos.y, 201, 100)
     
     # Height Bar
     fill(bad)
