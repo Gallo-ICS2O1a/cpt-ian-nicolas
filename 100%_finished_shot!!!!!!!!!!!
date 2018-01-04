@@ -14,8 +14,8 @@ distance_to_net = ball_pos.y - power_location
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(100, 100)
-height_speed = PVector(0, 15)
-net_pos = PVector(289, 100)
+height_speed = PVector(0, 2)
+net_pos = PVector(298, 100)
 
 # Aim Bar
 aim_point = PVector(400, 390)
@@ -69,7 +69,7 @@ def draw():
     fill(255)
     stroke(0)
     strokeWeight(2)
-    rect(net_pos.x, net_pos.y, 211, 100)
+    rect(net_pos.x, net_pos.y, 202, 100)
     
     # Height Bar
     fill(bad)
@@ -126,8 +126,11 @@ def draw():
                 aim = (aim_x - min_aim_point)*((aim_point.x - min_shot_point)/(aim_point.x - min_aim_point))
                 relative_aim = aim - 400
                 shot_slope = relative_aim / total_y_distance
+                if power_location + height_power.y == 185:
+                    if ball_pos.y <= 190:
+                        power_status = False
                 if power_status == True:
-                    ball_pos.y -= 5
+                    ball_pos.y -= 5 # (shot_slope / shot_slope) * 5
                     ball_pos.x += shot_slope * 5
                     # print(ball_pos.y)
                     fill(0) 
@@ -136,7 +139,6 @@ def draw():
             else:
                 power_status = False
 
-            
     if ball_pos.y <= 184 and ball_pos.y > power_location + height_power.y and power_status == False:
         height_status = True
         if height_status == True:
@@ -144,9 +146,9 @@ def draw():
             aim = (aim_x - min_aim_point)*((aim_point.x - min_shot_point)/(aim_point.x - min_aim_point))
             relative_aim = aim - 400
             shot_slope = relative_aim / total_y_distance
-            if ball_pos.y > power_location + height_power.y:
-                ball_pos.y -= 5
-                ball_pos.x += shot_slope * 5
+            
+            ball_pos.y -= 5
+            ball_pos.x += shot_slope * 5
     else:
         # if height_status == True:
             # print(ball_pos.y)
@@ -165,6 +167,7 @@ def mousePressed():
     
     if click_number == 0:
         height_speed = height_speed.mult(0)
+        print(height_point.y)
         if height_point.y >= 391:
             height_power = PVector(0, (-(power_location - (115 +(3.5 * 20)))))
         elif height_point.y >= 381:
@@ -213,7 +216,7 @@ def mousePressed():
         
         # print(height_power)
         click_number += 1
-        # print(height_power.y)
+        print(height_power.y)
         
     elif click_number == 1:
         rotation_height_speed = 0
