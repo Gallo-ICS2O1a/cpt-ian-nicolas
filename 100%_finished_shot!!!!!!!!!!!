@@ -15,7 +15,7 @@ bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(100, 100)
 height_speed = PVector(0, 5)
-net_pos = PVector(300, 100)
+net_pos = PVector(299, 100)
 
 # Aim Bar
 aim_point = PVector(400, 390)
@@ -69,7 +69,7 @@ def draw():
     fill(255)
     stroke(0)
     strokeWeight(2)
-    rect(net_pos.x, net_pos.y, 200, 100)
+    rect(net_pos.x, net_pos.y, 201, 100)
     
     # Height Bar
     fill(bad)
@@ -132,7 +132,7 @@ def draw():
                     # print(ball_pos.y)
                     fill(0) 
                     ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
-                    ball_size = ball_size * 0.99
+                    ball_size = ball_size * 0.98
             else:
                 power_status = False
 
@@ -206,6 +206,8 @@ def mousePressed():
         elif height_point.y >= 201:
             height_power = PVector(0, (-(power_location - (115 +(3.5 * 1)))))
         
+        elif height_point.y == 200:
+            height_power = PVector(0, -80)
         elif height_point.y <= 199:
             height_power = PVector(0, - 100)
         
