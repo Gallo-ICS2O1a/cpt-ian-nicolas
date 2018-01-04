@@ -6,7 +6,7 @@ ball_size = 30
 power_point = PVector(700, 400)
 rect_height_point = PVector(power_point.x - 7.5, power_point.y + 15)
 rect_height_dim = PVector(15, 415 - power_point.y - 15)
-power_change = PVector(0, 1)
+power_change = PVector(0, 10)
 power_location = 183 # 183 is the y location of where the power will make the ball stop
 distance_to_net = ball_pos.y - power_location
 
@@ -14,13 +14,13 @@ distance_to_net = ball_pos.y - power_location
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(100, 100)
-height_speed = PVector(0, 5)
-net_pos = PVector(299, 100)
+height_speed = PVector(0, 15)
+net_pos = PVector(289, 100)
 
 # Aim Bar
 aim_point = PVector(400, 390)
 aim_vector = PVector(-50, 0)
-rotation_height_speed = 0.007
+rotation_height_speed = 0.07
 min_aim_point = 350 # minimum x coordinate that the aim line can reach
 min_shot_point = 0 # minimum x coordinate that the shot can end up at
 max_aim_point = 450 # maximum x coorinate that the aim line can reach
@@ -69,7 +69,7 @@ def draw():
     fill(255)
     stroke(0)
     strokeWeight(2)
-    rect(net_pos.x, net_pos.y, 201, 100)
+    rect(net_pos.x, net_pos.y, 211, 100)
     
     # Height Bar
     fill(bad)
