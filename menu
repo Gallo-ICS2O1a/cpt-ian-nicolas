@@ -9,7 +9,7 @@ play = False
 
 
 def setup():
-    size(800, 400)
+    size(800, 500)
 
 
 def draw():
