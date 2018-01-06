@@ -8,7 +8,7 @@ gk_initial_pos = PVector(400, 175)
 gk_pos = PVector(400, 175) # gk is goal keeper
 gk_size = 50
 gk_radius = gk_size / 2 
-is_gk_diving = int(random(0, 10))
+is_gk_diving = int(random(0, 3))
 diving_side = int(random(0, 2))
 diving_distance_x = random(1, 74)
 diving_height = random(1, 52)
@@ -22,6 +22,7 @@ rect_height_dim = PVector(15, 265 - power_point.y - 15)
 power_change = PVector(0, 2)
 power_location = 183 # 183 is the y location of where the power will make the ball stop
 distance_to_net = ball_pos.y - power_location
+power_miss = 230 # ball power if shot is too short
 
 # Height Bar
 bad = color(230, 17, 17)
@@ -67,7 +68,7 @@ def draw():
     global net_pos, distance_to_net, aim, dive_x, dive_y
     global aim_point, aim_vector, rotation_speed, bad_aim_rect_pos1, good_aim_rect_pos, bad_aim_rect_pos2
     global diving_distance_x, is_gk_diving, diving_side, diving_height
-    global grass_pos, sky_pos
+    global grass_pos, sky_pos, power_miss
     
     ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
     ball_to_gk_dist = ball_to_gk_vect.mag()
@@ -189,7 +190,7 @@ def draw():
                 power_status = False
     else:
         if click_number == 3:
-            if ball_pos.y >= 230:
+            if ball_pos.y >= power_miss:
                 power_status = True
                 if power_status == True and rebounding_status == False:
                     ball_pos.y -= shot_y * 5
@@ -197,7 +198,8 @@ def draw():
                     fill(0) 
                     ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
                     ball_size = ball_size * 0.98
-                    # ball_radius = ball_size / 2
+            else:
+                power_status = False
 
     if ball_pos.y <= 184 and ball_pos.y > power_location + height_power.y and power_status == False and rebounding_status == False:
         height_status = True
@@ -208,12 +210,12 @@ def draw():
             if abs(ball_to_gk_dist) <= ball_radius + gk_radius:
                 print("touching")
                 # print(initial_ball_pos.y - total_y_distance , gk_initial_pos.y - diving_height)
-                if initial_ball_pos.y - total_y_distance < gk_initial_pos.y - diving_height:
-                    if (gk_initial_pos.y - diving_height) - (initial_ball_pos.y - total_y_distance) <= ball_radius + gk_radius:
+                if ball_pos.y - total_y_distance < gk_pos.y - diving_height:
+                    if (gk_pos.y - diving_height) - (ball_pos.y - total_y_distance) <= ball_radius + gk_radius:
                         rebounding_status = True
                         height_status = False
                         print(1)
-                    elif (initial_ball_pos.y - total_y_distance) + ball_radius >= (gk_initial_pos.y - diving_height) - gk_radius:
+                    elif (ball_pos.y - total_y_distance) + ball_radius >= (gk_pos.y - diving_height) - gk_radius:
                         rebounding_status = True
                         height_status = False
                         print(2)
@@ -221,12 +223,12 @@ def draw():
                         rebounding_status = False
                         height_status = True
                         print(3)
-                elif initial_ball_pos.y - total_y_distance > gk_initial_pos.y - diving_height:
-                    if (initial_ball_pos.y - total_y_distance) - (gk_initial_pos.y - diving_height) <= ball_radius + gk_radius:
+                elif ball_pos.y - total_y_distance > gk_pos.y - diving_height:
+                    if (ball_pos.y - total_y_distance) - (gk_pos.y - diving_height) <= ball_radius + gk_radius:
                         rebounding_status = True
                         height_status = False
                         print(4)
-                    elif (initial_ball_pos.y - total_y_distance) - ball_radius < (gk_initial_pos.y - diving_height) + gk_radius:
+                    elif (ball_pos.y - total_y_distance) - ball_radius < (gk_pos.y - diving_height) + gk_radius:
                         rebounding_status = True
                         height_status = False
                         print(5)
@@ -234,7 +236,7 @@ def draw():
                         rebounding_status = False
                         height_status = True
                         print(6)
-                elif initial_ball_pos.y - total_y_distance == gk_initial_pos.y - diving_height:
+                elif ball_pos.y - total_y_distance == gk_pos.y - diving_height:
                     rebounding_status = True
                     height_status = False 
                     print(7)
@@ -259,7 +261,8 @@ def draw():
             shot_x *= 0
             shot_y *= 0
             rebounding_status == False
-    print(height_status)
+    # print(rebounding_status, power_status, height_status)
+
 def mousePressed():
     global bad, good, height_point, height_speed
     global aim_point, aim_point1, rotation_speed
