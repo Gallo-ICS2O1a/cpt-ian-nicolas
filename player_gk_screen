@@ -11,12 +11,17 @@ sky_pos = PVector(0, 0)
 gk_pos = PVector(400, 175) # gk is goal keeper
 gk_size = 50
 gk_radius = gk_size / 2 
+
+dive_choice = False
+
+dive_pos = PVector(0, 0)
 def setup():
     size(800, 500)
     
 def draw():
     global grass_pos, sky_pos, ball_size, ball_pos, net_pos, gk_size, gk_pos
-    
+    global dive_choice, dive_pos
+
     ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
     ball_to_gk_dist = ball_to_gk_vect.mag()
     ball_radius = ball_size / 2
@@ -42,8 +47,36 @@ def draw():
     # goalkeeper
     fill(0, 0, 255)
     noStroke()
-    ellipse(gk_pos.x, gk_pos.y, gk_size, gk_size)
 
     
-    fill(0) 
+    # if dive_choice is False:
+    #     for x in range(325, 500, 50):
+    #         for y in range(125, 176, 50):
+    #             ellipse(x, y, 50, 50)
+    # elif dive_choice is True:
+    if dive_choice is False:
+        # ellipse(mouseX, mouseY, 50, 50)
+        fill(255)
+        stroke(0, 0, 200)
+        ellipse(dive_pos.x, dive_pos.y, 50, 50)
+    elif dive_choice is True:
+        fill(0, 0, 200)
+        ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
+        # dive_choice = False
+        
+    # dive_pos.x = mouseX
+    # dive_pos.y = mouseY
+
+    print(dive_choice)    
+    
+    fill(0)
+    stroke(0) 
     ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+    
+def mousePressed():
+    global dive_choice
+    global dive_pos
+    if mouseX > 298 and mouseX < 298 + 204 and mouseY > 100 and mouseY < 200:
+        print(mouseX, mouseY)
+        dive_pos = PVector(mouseX, mouseY)
+        dive_choice = True
