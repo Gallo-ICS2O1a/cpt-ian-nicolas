@@ -1,0 +1,150 @@
+# ball variables
+ball_pos = PVector(400, 385)
+ball_size = 30
+ball_x_movement_pos = random(290, 510)
+ball_y_movement_pos = random(95, 193)
+ball_power = int(random(0, 16))
+ball_distance = PVector(
+    ball_x_movement_pos - ball_pos.x, ball_y_movement_pos - ball_pos.y)
+cpu_shot_x = ball_distance.x / ball_distance.y
+cpu_shot_y = ball_distance.x / ball_distance.x
+
+net_pos = PVector(298, 100)
+
+# Fan variables
+red_team = color(230, 17, 17)
+blue_team = color(17, 230, 34)
+red_fan_pos = PVector(15, 250)
+blue_fan_pos = PVector(785, 250)
+fan_size = PVector(30, 50)
+fan_jump = 210
+jump_speed = 0
+
+# background variables
+grass_pos = PVector(0, 200)
+sky_pos = PVector(0, 0)
+
+gk_pos = PVector(400, 175)  # gk is goal keeper
+gk_size = 50
+gk_radius = gk_size / 2
+
+dive_choice = True
+
+cpu_shooting_status = True
+
+dive_pos = PVector(400, 175)
+click_number = 3
+
+gk_screen_goal = False
+gk_screen_miss = False
+
+
+def setup():
+    size(800, 500)
+
+def draw():
+    global grass_pos, sky_pos, ball_size, ball_pos, net_pos, gk_size, gk_pos, red_fan_pos
+    global dive_choice, dive_pos, ball_x_movement_pos, ball_y_movement_pos, ball_power
+    global ball_power, cpu_shot_x, cpu_shot_y, ball_distance, cpu_shooting_status
+    global good, bad, fan_size, blue_fan_pos, gk_screen_goal, gk_screen_miss, fan_jump
+    global jump_speed
+
+    ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
+    ball_to_gk_dist = ball_to_gk_vect.mag()
+    ball_radius = ball_size / 2
+
+    background(255)
+
+    # grass
+    noStroke()
+    fill(100, 255, 0)
+    rect(grass_pos.x, grass_pos.y, 800, 300)
+
+    # sky
+    noStroke()
+    fill(0, 100, 255)
+    rect(sky_pos.x, sky_pos.y, 800, 200)
+
+    # net
+    fill(255)
+    stroke(0)
+    strokeWeight(2)
+    rect(net_pos.x, net_pos.y, 204, 100)
+
+    # goalkeeper
+    fill(0, 0, 255)
+    noStroke()
+
+    if dive_choice is True:
+        # ellipse(mouseX, mouseY, 50, 50)
+        fill(255)
+        stroke(0, 0, 200)
+        ellipse(dive_pos.x, dive_pos.y, 50, 50)
+    elif dive_choice is False:
+        fill(0, 0, 200)
+        ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
+        # dive_choice = False
+
+    fill(0)
+    stroke(0)
+    ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+
+    if cpu_shooting_status == True:
+        if ball_power == 0:
+            ball_y_movement_pos = 250
+            if ball_pos.y >= ball_y_movement_pos:
+                ball_pos.x += cpu_shot_x * 5
+                ball_pos.y -= cpu_shot_y * 5
+                fill(0)
+                ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+                ball_size *= 0.98
+        elif ball_power >= 1:
+            if ball_pos.y >= ball_y_movement_pos:
+                ball_pos.x += cpu_shot_x * 5
+                ball_pos.y -= cpu_shot_y * 5
+                fill(0)
+                ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+                ball_size *= 0.98
+            else:
+                cpu_shooting_status = False
+
+    if ball_pos.x > net_pos.x + ball_radius and ball_pos.x < (net_pos.x + 204) - ball_radius and ball_pos.y > net_pos.y + ball_radius and ball_pos.y < (net_pos.y + 100) - ball_radius and abs(ball_to_gk_dist) > ball_radius + gk_radius and click_number == 3 and cpu_shooting_status == False:
+        textSize(32)
+        text("GOAL", 360, 200)
+        gk_screen_goal = True
+    elif (ball_pos.x < net_pos.x + ball_radius or ball_pos.x > (net_pos.x + 204) - ball_radius or ball_pos.y < net_pos.y + ball_radius or ball_pos.y > (net_pos.y + 100) - ball_radius or abs(ball_to_gk_dist) < ball_radius + gk_radius) and click_number == 3 and cpu_shooting_status == False:
+        textSize(32)
+        text("MISS", 360, 200)
+        gk_screen_miss = False
+
+    # red fans
+    fill(red_team)
+    ellipse(red_fan_pos.x, red_fan_pos.y, fan_size.x, fan_size.y)
+
+    red_fan_pos.y += jump_speed
+    
+    # blue fan variables
+    fill(blue_team)
+    ellipse(blue_fan_pos.x, blue_fan_pos.y, fan_size.x, fan_size.y)
+
+    if gk_screen_goal == True:
+        if red_fan_pos.y > 250:
+            gk_screen_goal = False
+            jump_speed = 0
+        elif red_fan_pos.y >= fan_jump:
+            if jump_speed == 0:
+                jump_speed = -1
+        elif red_fan_pos.y < fan_jump:
+            if jump_speed == -1:
+                jump_speed = 1
+
+    
+    print(red_fan_pos.y, jump_speed, gk_screen_goal)
+def mousePressed():
+    global dive_choice
+    global dive_pos
+    if dive_choice is True:
+        if mouseX > 298 and mouseX < 298 + 204 and mouseY > 100 and mouseY < 200:
+            print(mouseX, mouseY)
+            dive_pos = PVector(mouseX, mouseY)
+            dive_choice = False
