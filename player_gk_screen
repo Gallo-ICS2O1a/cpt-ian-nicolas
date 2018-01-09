@@ -12,7 +12,7 @@ gk_pos = PVector(400, 175) # gk is goal keeper
 gk_size = 50
 gk_radius = gk_size / 2 
 
-dive_choice = False
+dive_choice = True
 
 dive_pos = PVector(0, 0)
 def setup():
@@ -54,12 +54,12 @@ def draw():
     #         for y in range(125, 176, 50):
     #             ellipse(x, y, 50, 50)
     # elif dive_choice is True:
-    if dive_choice is False:
+    if dive_choice is True:
         # ellipse(mouseX, mouseY, 50, 50)
         fill(255)
         stroke(0, 0, 200)
         ellipse(dive_pos.x, dive_pos.y, 50, 50)
-    elif dive_choice is True:
+    elif dive_choice is False:
         fill(0, 0, 200)
         ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
         # dive_choice = False
@@ -76,7 +76,8 @@ def draw():
 def mousePressed():
     global dive_choice
     global dive_pos
-    if mouseX > 298 and mouseX < 298 + 204 and mouseY > 100 and mouseY < 200:
-        print(mouseX, mouseY)
-        dive_pos = PVector(mouseX, mouseY)
-        dive_choice = True
+    if dive_choice is True:
+        if mouseX > 298 and mouseX < 298 + 204 and mouseY > 100 and mouseY < 200:
+            print(mouseX, mouseY)
+            dive_pos = PVector(mouseX, mouseY)
+            dive_choice = False
