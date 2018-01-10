@@ -96,6 +96,7 @@ next = False
 
 cpu_ball_pos = PVector(400, 385)
 cpu_ball_size = 30
+cpu_ball_radius = cpu_ball_size / 2
 def setup():
     size(800, 500)
 
@@ -157,7 +158,8 @@ def draw():
             global diving_distance_x, is_gk_diving, diving_side, diving_height
             global grass_pos, sky_pos, power_miss
             global gk_initial_pos
-
+            global cpu_ball_radius
+            global next
             ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
             ball_to_gk_dist = ball_to_gk_vect.mag()
             ball_radius = ball_size / 2
@@ -289,8 +291,7 @@ def draw():
                             ball_pos.y -= shot_y * 5
                             ball_pos.x += shot_x * 5
                             fill(0)
-                            ellipse(
-                                ball_pos.x, ball_pos.y, ball_size, ball_size)
+                            ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
                             ball_size = ball_size * 0.98
                     else:
                         power_status = False
@@ -313,7 +314,7 @@ def draw():
                     print("goal")
                     textSize(32)
                     text("GOAL", 360, 200)
-                    text("next", 700, 100)
+                    text("next", 700, 50)
                     next = True
                     # if next is True:
                     #     player_shooting = False
@@ -322,12 +323,13 @@ def draw():
                 elif (ball_pos.x < net_pos.x + ball_radius or ball_pos.x > (net_pos.x + 204) - ball_radius or ball_pos.y < net_pos.y + ball_radius or ball_pos.y > (net_pos.y + 100) - ball_radius or abs(ball_to_gk_dist) < ball_radius + gk_radius) and click_number == 3 and rebounding_status == False and height_status == False and power_status == False:
                     textSize(32)
                     text("MISS", 360, 200)
-                    text("next", 700, 100)
+                    text("next", 700, 50)
                     next = True
                     # if next is True:
                         # player_shooting = False
                     
         elif player_shooting is not True:
+            click_number = 1
             print(click_number)
             global grass_pos, sky_pos, net_pos, gk_size, gk_pos
             global dive_choice, dive_pos, ball_x_movement_pos, ball_y_movement_pos, ball_power
@@ -384,12 +386,12 @@ def draw():
                 if cpu_shooting_status == True:
                     if ball_power == 0:
                         ball_y_movement_pos = 250
-                        if ball_pos.y >= ball_y_movement_pos:
-                            ball_pos.x += cpu_shot_x * 5
-                            ball_pos.y -= cpu_shot_y * 5
+                        if cpu_ball_pos.y >= ball_y_movement_pos:
+                            cpu_ball_pos.x += cpu_shot_x * 5
+                            cpu_ball_pos.y -= cpu_shot_y * 5
                             fill(0)
-                            ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
-                            ball_size *= 0.98
+                            ellipse(cpu_ball_pos.x, cpu_ball_pos.y, cpu_ball_size, cpu_ball_size)
+                            cpu_ball_size *= 0.98
                     elif ball_power >= 1:
                         if cpu_ball_pos.y >= ball_y_movement_pos:
                             cpu_ball_pos.x += cpu_shot_x * 5
@@ -400,10 +402,10 @@ def draw():
                         else:
                             cpu_shooting_status = False
 
-                if ball_pos.x > net_pos.x + ball_radius and ball_pos.x < (net_pos.x + 204) - ball_radius and ball_pos.y > net_pos.y + ball_radius and ball_pos.y < (net_pos.y + 100) - ball_radius and abs(ball_to_gk_dist) > ball_radius + gk_radius and click_number == 1 and cpu_shooting_status == False:
+                if cpu_ball_pos.x > net_pos.x + cpu_ball_radius and cpu_ball_pos.x < (net_pos.x + 204) - cpu_ball_radius and cpu_ball_pos.y > net_pos.y + cpu_ball_radius and cpu_ball_pos.y < (net_pos.y + 100) - cpu_ball_radius and abs(ball_to_gk_dist) > cpu_ball_radius + gk_radius and click_number == 1 and cpu_shooting_status == False:
                     textSize(32)
                     text("GOAL", 360, 200)
-                elif (ball_pos.x < net_pos.x + ball_radius or ball_pos.x > (net_pos.x + 204) - ball_radius or ball_pos.y < net_pos.y + ball_radius or ball_pos.y > (net_pos.y + 100) - ball_radius or abs(ball_to_gk_dist) < ball_radius + gk_radius) and click_number == 1 and cpu_shooting_status == False:
+                elif (cpu_ball_pos.x < net_pos.x + cpu_ball_radius or cpu_ball_pos.x > (net_pos.x + 204) - cpu_ball_radius or cpu_ball_pos.y < net_pos.y + cpu_ball_radius or cpu_ball_pos.y > (net_pos.y + 100) - cpu_ball_radius or abs(ball_to_gk_dist) < cpu_ball_radius + gk_radius) and click_number == 1 and cpu_shooting_status == False:
                     textSize(32)
                     text("MISS", 360, 200)
 
@@ -416,6 +418,7 @@ def draw():
         #     back = 0
         # textSize(15 + back)
         # text("<-- Back", 705, 40)
+
 
 def mousePressed():
     global bad, good, height_point, height_speed
@@ -505,8 +508,7 @@ def mousePressed():
                 print(height_power.y)
                 print(total_y_distance)
                 print(ball_pos.y - total_y_distance, gk_pos.y - diving_height)
-                print(
-                    is_gk_diving, diving_side, diving_distance_x, diving_height)
+                print(is_gk_diving, diving_side, diving_distance_x, diving_height)
             elif click_number == 1:
                 rotation_speed = 0
                 aim_x = 400 + aim_vector.x
@@ -523,7 +525,7 @@ def mousePressed():
                 power_change = power_change.mult(0)
                 power = PVector(0, rect_height_dim.y + 15)
                 click_number += 1
-        if player_shooting is not True:
+        if player_shooting is False and next is True:
             global dive_choice
             global dive_pos
             global start_shooting
@@ -565,12 +567,5 @@ def mouseClicked():
     if play is False:
         if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY < 200:
             play = True
-    if player_shooting is True:
-        if mouseX > 700 and mouseX < 800 and mouseY > 0 and mouseY < 50:
-            player_shooting = False
-    #         click_number = 0
-    
-    if player_shooting is True and next is True and mouseX > 700 and mouseY < 100:
+    if player_shooting is True and next is True and mouseX > 700 and mouseX < 800 and mouseY > 0 and mouseY < 100:
         player_shooting = False
-
-    # print(play)
