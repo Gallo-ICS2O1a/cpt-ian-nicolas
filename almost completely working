@@ -97,6 +97,9 @@ next = False
 cpu_ball_pos = PVector(400, 385)
 cpu_ball_size = 30
 cpu_ball_radius = cpu_ball_size / 2
+
+player_score = 0
+cpu_score = 0
 def setup():
     size(800, 500)
 
@@ -106,6 +109,7 @@ def draw():
     global text_instruction, play
     global player_shooting, cpu_shooting
     global cpu_shooting_status
+    global player_score, cpu_score
 
     background(filler)
     fill(0)
@@ -160,12 +164,13 @@ def draw():
             global gk_initial_pos
             global cpu_ball_radius
             global next
+            global player_score
             ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
             ball_to_gk_dist = ball_to_gk_vect.mag()
             ball_radius = ball_size / 2
 
             background(255)
-
+            
             # grass
             noStroke()
             fill(100, 255, 0)
@@ -175,9 +180,9 @@ def draw():
             noStroke()
             fill(0, 100, 255)
             rect(sky_pos.x, sky_pos.y, 800, 200)
+            
 
             # Power Arrow
-
             fill(0)
             triangle(power_point.x, power_point.y, power_point.x - 25,
                      power_point.y + 15, power_point.x + 25, power_point.y + 15)
@@ -189,7 +194,9 @@ def draw():
 
             power_point.add(power_change)
             rect_height_dim = PVector(15, -(265 - power_point.y - 15))
-
+            textSize(20)
+            text("power", 680, 300)
+            
             # net
             fill(255)
             stroke(0)
@@ -200,6 +207,12 @@ def draw():
             fill(255, 0, 0)
             noStroke()
             ellipse(gk_pos.x, gk_pos.y, gk_size, gk_size)
+            
+            fill(255, 10, 10)
+            textSize(20)
+            text(player_score, 200, 100)
+            fill(10, 10, 255)
+            text(cpu_score, 600, 100)
 
             if click_number == 3:
                 if is_gk_diving <= 2:  # no movement
@@ -277,8 +290,7 @@ def draw():
                             ball_pos.x += shot_x * 5
                             # print(ball_pos.y)
                             fill(0)
-                            ellipse(
-                                ball_pos.x, ball_pos.y, ball_size, ball_size)
+                            ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
                             ball_size = ball_size * 0.98
                             ball_radius = ball_size / 2
                     else:
@@ -299,7 +311,7 @@ def draw():
             if ball_pos.y <= 185 and ball_pos.y > power_location + height_power.y and power_status == False and rebounding_status == False:
                 height_status = True
                 # print(ball_to_gk_dist)
-                print(abs(ball_to_gk_dist), ball_radius + gk_radius)
+                # print(abs(ball_to_gk_dist), ball_radius + gk_radius)
                 if height_status == True:
                     ball_pos.y -= shot_y * 5
                     ball_pos.x += shot_x * 5
@@ -315,7 +327,12 @@ def draw():
                     textSize(32)
                     text("GOAL", 360, 200)
                     text("next", 700, 50)
-                    next = True
+                    if next is not True:
+                        player_score += 1
+                        print(player_score)
+                        next = True
+                    
+                    
                     # if next is True:
                     #     player_shooting = False
                     # play_shooting = False
@@ -330,7 +347,7 @@ def draw():
                     
         elif player_shooting is not True:
             click_number = 1
-            print(click_number)
+            # print(click_number)
             global grass_pos, sky_pos, net_pos, gk_size, gk_pos
             global dive_choice, dive_pos, ball_x_movement_pos, ball_y_movement_pos, ball_power
             global ball_power, cpu_shot_x, cpu_shot_y, ball_distance, cpu_shooting_status
@@ -368,7 +385,7 @@ def draw():
             fill(0)
             stroke(0)
             ellipse(cpu_ball_pos.x, cpu_ball_pos.y, cpu_ball_size, cpu_ball_size)
-            print(click_number)
+            # print(click_number)
 
             if start_shooting is True:
                 if dive_choice is True:
@@ -397,7 +414,7 @@ def draw():
                             cpu_ball_pos.x += cpu_shot_x * 5
                             cpu_ball_pos.y -= cpu_shot_y * 5
                             fill(0)
-                            ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+                            ellipse(cpu_ball_pos.x, cpu_ball_pos.y, cpu_ball_size, cpu_ball_size)
                             cpu_ball_size *= 0.98
                         else:
                             cpu_shooting_status = False
@@ -405,6 +422,7 @@ def draw():
                 if cpu_ball_pos.x > net_pos.x + cpu_ball_radius and cpu_ball_pos.x < (net_pos.x + 204) - cpu_ball_radius and cpu_ball_pos.y > net_pos.y + cpu_ball_radius and cpu_ball_pos.y < (net_pos.y + 100) - cpu_ball_radius and abs(ball_to_gk_dist) > cpu_ball_radius + gk_radius and click_number == 1 and cpu_shooting_status == False:
                     textSize(32)
                     text("GOAL", 360, 200)
+                    cpu_score = 0
                 elif (cpu_ball_pos.x < net_pos.x + cpu_ball_radius or cpu_ball_pos.x > (net_pos.x + 204) - cpu_ball_radius or cpu_ball_pos.y < net_pos.y + cpu_ball_radius or cpu_ball_pos.y > (net_pos.y + 100) - cpu_ball_radius or abs(ball_to_gk_dist) < cpu_ball_radius + gk_radius) and click_number == 1 and cpu_shooting_status == False:
                     textSize(32)
                     text("MISS", 360, 200)
@@ -434,13 +452,13 @@ def mousePressed():
         if player_shooting is True:
             if click_number == 0:
                 height_speed = height_speed.mult(0)
-                print(height_point.y)
+                # print(height_point.y)
                 if height_point.y >= 391:
                     height_power = PVector(
                         0, (-(power_location - (115 + (3.5 * 20)))))
                 elif height_point.y >= 381:
                     height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 19)))))
+                    0, (-(power_location - (115 + (3.5 * 19)))))
                 elif height_point.y >= 371:
                     height_power = PVector(
                         0, (-(power_location - (115 + (3.5 * 18)))))
@@ -504,18 +522,18 @@ def mousePressed():
                 # print(height_power)
                 click_number += 1
                 total_y_distance = distance_to_net - height_power.y
-                print("Hello")
-                print(height_power.y)
-                print(total_y_distance)
-                print(ball_pos.y - total_y_distance, gk_pos.y - diving_height)
-                print(is_gk_diving, diving_side, diving_distance_x, diving_height)
+                # print("Hello")
+                # print(height_power.y)
+                # print(total_y_distance)
+                # print(ball_pos.y - total_y_distance, gk_pos.y - diving_height)
+                # print(is_gk_diving, diving_side, diving_distance_x, diving_height)
             elif click_number == 1:
                 rotation_speed = 0
                 aim_x = 400 + aim_vector.x
                 aim = (aim_x - min_aim_point) * \
                     ((aim_point.x - min_shot_point) /
                      (aim_point.x - min_aim_point))
-                print(aim)
+                # print(aim)
                 relative_aim = aim - 400
                 shot_x = relative_aim / total_y_distance
                 shot_y = shot_x / shot_x
