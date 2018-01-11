@@ -186,8 +186,8 @@ def draw():
             fill(0)
             triangle(power_point.x, power_point.y, power_point.x - 25,
                      power_point.y + 15, power_point.x + 25, power_point.y + 15)
-            rect(rect_height_point.x, rect_height_point.y,
-                 rect_height_dim.x, rect_height_dim.y)
+            rect(rect_height_point.x, rect_height_point.y, rect_height_dim.x, rect_height_dim.y)
+            text("Height", 100, 440)
 
             if power_point.y > 250 or power_point.y < 175:
                 power_change = power_change.mult(-1)
@@ -243,8 +243,7 @@ def draw():
             stroke(0)
             strokeWeight(5)
             fill(0)
-            line(height_point.x, height_point.y,
-                 height_point.x + 20, height_point.y)
+            line(height_point.x, height_point.y, height_point.x + 20, height_point.y)
 
             height_point.add(height_speed)
 
@@ -274,7 +273,8 @@ def draw():
             if line_angle < -180 or line_angle > 0:
                 rotation_speed = -rotation_speed
             aim_vector.rotate(rotation_speed)
-
+            text("Aim Bar", 385, 430)
+            
             fill(0)
             ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
 
