@@ -1,3 +1,4 @@
+# Added instructions to game
 # Menu
 text_instruction = 30
 text_play = 30
@@ -138,8 +139,11 @@ def draw():
         fill(0)
         textSize(30)
         text("Instructions:", 300, 80)
-        textSize(10)
-        text("These are the instructions", 100, 200)
+        textSize(20)
+        text("Take turns between you and the computer to shoot the ball", 80, 200)
+        text("When it's your turn click when you want the corresponding bar to stop", 80, 225)
+        text("When it's the computer's turn to shoot tap on the ball", 80, 250)
+        text("then tap anywhere on the net to stop the ball", 100, 275)
         fill(255)
         rect(700, 400, 100, 100)
         fill(0)
