@@ -24,7 +24,7 @@ dive_y = diving_distance_x / diving_distance_x
 power_point = PVector(650, 250)
 rect_height_point = PVector(power_point.x - 7.5, power_point.y + 15)
 rect_height_dim = PVector(15, 265 - power_point.y - 15)
-power_change = PVector(0, 5)
+power_change = PVector(0, 0)
 # 183 is the y location of where the power will make the ball stop
 power_location = 183
 distance_to_net = ball_pos.y - power_location
@@ -39,7 +39,7 @@ height_speed = PVector(0, 10)
 # Aim Bar
 aim_point = PVector(400, 390)
 aim_vector = PVector(-50, 0)
-rotation_speed = 0.014
+rotation_speed = 0
 min_aim_point = 350  # minimum x coordinate that the aim line can reach
 min_shot_point = 0  # minimum x coordinate that the shot can end up at
 max_aim_point = 450  # maximum x coorinate that the aim line can reach
@@ -69,6 +69,7 @@ cpu_shooting_status = False
 next = False
 start_shooting = False
 cpu_goal = False
+end_game = True
 
 # gk screen variables
 cpu_ball_pos = PVector(400, 385)
@@ -171,7 +172,7 @@ def draw():
             global net_pos, distance_to_net, aim, dive_x, dive_y
             global aim_point, aim_vector, rotation_speed, bad_aim_rect_pos1, good_aim_rect_pos, bad_aim_rect_pos2
             global diving_distance_x, is_gk_diving, diving_side, diving_height
-            global grass_pos, sky_pos, power_miss
+            global grass_pos, sky_pos, power_miss, end_game
             global player_score_once, player_miss_once
             global next, score_player, score_cpu
             ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
@@ -377,6 +378,7 @@ def draw():
             if turn_player == 4:
                 if abs(score_player - score_cpu) >= 3:
                     winner = max(score_player, score_cpu)
+                    end_game = True
                     if max(score_player, score_cpu) is score_cpu:
                         textSize(40)
                         text("You Lose!", 300, 250)
@@ -386,6 +388,7 @@ def draw():
             elif turn_player == 5:
                 if abs(score_player - score_cpu) >= 2:
                     winner = max(score_player, score_cpu)
+                    end_game = True
                     if max(score_player, score_cpu) is score_cpu:
                         textSize(40)
                         text("You Lose!", 300, 250)
@@ -400,7 +403,7 @@ def draw():
             global dive_choice, dive_pos, ball_x_movement_pos, ball_y_movement_pos, ball_power
             global ball_power, cpu_shot_x, cpu_shot_y, ball_distance, cpu_shooting_status
             global start_shooting, start_shooting, jump_speed_red, jump_speed_blue, red_fan_head_pos, blue_fan_head_pos, head_size
-            global gk_screen_goal, gk_screen_miss, click_number, cpu_goal
+            global gk_screen_goal, gk_screen_miss, click_number, cpu_goal, end_game
             global cpu_ball_pos, fan_size, blue_fan_pos, fan_jump, red_fan_pos
             global cpu_ball_size , cpu_ball_radius, cpu_score_once, score_player, score_cpu
             
@@ -523,7 +526,7 @@ def draw():
                         cpu_miss_once = True
                     # text("next", 700, 50)
                     # next = True
-                
+
                 # red fan jump
                 if gk_screen_goal == True:
                     if red_fan_pos.y > 250:
@@ -581,6 +584,7 @@ def draw():
                 if turn_gk == 3:
                     if abs(score_player - score_cpu) >= 3:
                         winner = max(score_player, score_cpu)
+                        end_game = True
                         if max(score_player, score_cpu) is score_cpu:
                             textSize(40)
                             text("You Lose!", 300, 250)
@@ -589,6 +593,7 @@ def draw():
                             text("You Win!", 300, 250)
                 elif turn_gk == 4:
                     if abs(score_player - score_cpu) >= 2:
+                        end_game = True
                         winner = max(score_player, score_cpu)
                         if max(score_player, score_cpu) is score_cpu:
                             textSize(40)
@@ -596,25 +601,16 @@ def draw():
                         elif max(score_player, score_cpu) is score_player:
                             textSize(40)
                             text("You Win!", 300, 250)
-                elif turn_gk == 5:
+                elif turn_gk >= 5:
                     if abs(score_player - score_cpu) >= 1:
                         winner = max(score_player, score_cpu)
+                        end_game = True
                         if max(score_player, score_cpu) is score_cpu:
                             textSize(40)
                             text("You Lose!", 300, 250)
                         elif max(score_player, score_cpu) is score_player:
                             textSize(40)
                             text("You Win!", 300, 250)
-                elif turn_gk >= 6:
-                    if abs(score_player - score_cpu) >= 1:
-                        winner = max(score_player, score_cpu)
-                        if max(score_player, score_cpu) is score_cpu:
-                            textSize(40)
-                            text("You Lose!", 300, 250)
-                        elif max(score_player, score_cpu) is score_player:
-                            textSize(40)
-                            text("You Win!", 300, 250)
-
 
             
 def mousePressed():
@@ -625,7 +621,7 @@ def mousePressed():
     global height_power, power_location, total_y_distance, distance_to_net
     global text_play, min_aim_point, min_shot_point, max_shot_point, max_aim_point
     global ball_pos, ball_size
-    global gk_pos, next
+    global gk_pos, next, rotation_speed
     global player_shooting
     if play is True:
         if player_shooting is True:
@@ -701,6 +697,9 @@ def mousePressed():
                 # print(height_power)
                 click_number += 1
                 total_y_distance = distance_to_net - height_power.y
+    
+                rotation_speed = 0.014
+        
                 # print(height_power.y)
                 # print(total_y_distance)
                 # print(ball_pos.y - total_y_distance, gk_pos.y - diving_height)
@@ -716,7 +715,8 @@ def mousePressed():
                 shot_x = relative_aim / total_y_distance
                 shot_y = shot_x / shot_x
                 click_number += 1
-
+                power_change = PVector(0, 5)
+                
             elif click_number == 2:
                 power_change = power_change.mult(0)
                 power = PVector(0, rect_height_dim.y + 15)
@@ -754,7 +754,7 @@ def mouseClicked():
     global player_shooting, ball_pos, gk_pos, height_speed, rotation_speed
     global player_score_once, cpu_score_once, is_gk_diving, diving_side
     global diving_distance_x, diving_height, dive_x, dive_y, cpu_goal, height_point
-    global gk_screen_goal, gk_screen_miss, jump_speed_red, jump_speed_blue
+    global gk_screen_goal, gk_screen_miss, jump_speed_red, jump_speed_blue, end_game
     global red_fan_head_pos, blue_fan_head_pos, blue_fan_pos, red_fan_pos
     global power_point, rect_height_point, rect_height_dim, cpu_miss_once, player_miss_once
     
