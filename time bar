@@ -1,14 +1,19 @@
 x=150
 speed = 1
+go = False
 def setup():
     size(400, 400)
 def draw():
-    global x, speed
+    global x, speed, go
     background(255)
-    fill(0)
-    rect(100, 100, 150, 40)
-    fill(255)
-    rect(100, 100, x, 40)
-    x -= speed
-    if x == 0:
-        speed = 0
+    if go is True:
+        fill(0)
+        rect(100, 100, 150, 40)
+        fill(255)
+        rect(100, 100, x, 40)
+        x -= speed
+        if x == 0:
+            speed = 0
+def mouseClicked():
+    global go
+    go = True
