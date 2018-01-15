@@ -99,8 +99,8 @@ blue_fan_head_pos = PVector(725, 215)
 head_size = PVector(20, 20)
 
 # score variables
-score_player = 4
-score_cpu = 4
+score_player = 0
+score_cpu = 0
 
 # net
 net_pos = PVector(298, 100)
