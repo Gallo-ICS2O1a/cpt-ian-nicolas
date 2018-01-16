@@ -412,6 +412,7 @@ def draw():
             global gk_screen_goal, gk_screen_miss, click_number, cpu_goal, end_game
             global cpu_ball_pos, fan_size, blue_fan_pos, fan_jump, red_fan_pos
             global cpu_ball_size , cpu_ball_radius, cpu_score_once, score_player, score_cpu
+            global comp_shoot, time_bar, time_speed
             
             cpu_ball_radius = cpu_ball_size / 2
             ball_to_gk_vect2 = PVector.sub(cpu_ball_pos, dive_pos)
@@ -494,6 +495,8 @@ def draw():
                 time_bar -= time_speed
                 if time_bar <= 0:
                     time_speed = 0
+                    cpu_shooting_status = True
+                    start_shooting = True
                     cpu_shooting_status = True
             
             if start_shooting is True:
@@ -745,11 +748,7 @@ def mousePressed():
             if start_shooting is False:
                 if mouseX > 385 and mouseX < 415 and mouseY > 370 and mouseY < 400:
                     comp_shoot = True
-                    if time_bar == 0:
-                        start_shooting = True
-                        click_number += 1
-                        cpu_shooting_status = True
-                        # delay(1000)
+                    click_number += 1
             if dive_choice is True:
                 if mouseX > 298 and mouseX < 298 + 204 and mouseY > 100 and mouseY < 200:
                     print(mouseX, mouseY)
@@ -775,7 +774,7 @@ def mouseClicked():
     global gk_screen_goal, gk_screen_miss, jump_speed_red, jump_speed_blue, end_game
     global red_fan_head_pos, blue_fan_head_pos, blue_fan_pos, red_fan_pos
     global power_point, rect_height_point, rect_height_dim, cpu_miss_once, player_miss_once
-    global time_bar, comp_shoot
+    global time_bar, comp_shoot, time_speed
     
     # instructions
     if instruction is False:
@@ -818,6 +817,8 @@ def mouseClicked():
         blue_fan_pos = PVector(725, 250)
         cpu_miss_once = False
         comp_shoot = False
+        time_bar = 150
+        time_speed = 1
 
     elif player_shooting is False and next is True and mouseX > 700 and mouseX < 800 and mouseY > 0 and mouseY < 100:
         player_shooting = True
@@ -827,8 +828,8 @@ def mouseClicked():
         gk_pos = PVector(400, 175)
         height_speed = PVector(0, 10)
         height_point = PVector(150, 100)
-        rotation_speed = 0.014
-        power_change = PVector(0, 5)
+        rotation_speed = 0
+        power_change = PVector(0, 0)
         ball_size = 30
         next = False
         gk_pos = PVector(400, 175)  # gk is goal keeper
@@ -842,4 +843,3 @@ def mouseClicked():
         rect_height_point = PVector(power_point.x - 7.5, power_point.y + 15)
         rect_height_dim = PVector(15, 265 - power_point.y - 15)
         player_miss_once = False
-        time_bar = 150
