@@ -115,6 +115,8 @@ comp_shoot = False
 
 def setup():
     size(800, 500)
+    global field_background
+    field_background = loadImage("soccer field.jpg")
 
 
 def draw():
@@ -140,8 +142,11 @@ def draw():
         text_instruction = 50
     else:
         text_instruction = 30
-    if instruction is True:
-        background(255)
+    if instruction == True:
+        background(74, 140, 97)
+        image(field_background, 0, 10)
+        fill(255, 255, 255, 160)
+        rect(0, 0, 800, 500)
         fill(0)
         textSize(30)
         text("Instructions:", 300, 80)
