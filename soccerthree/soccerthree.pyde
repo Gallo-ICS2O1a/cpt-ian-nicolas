@@ -114,6 +114,8 @@ time_speed = 1
 go = False
 comp_shoot = False
 
+leader_boards = False
+text_leaderboards = 30
 def setup():
     size(800, 500)
     global soccer_background
@@ -139,6 +141,32 @@ def draw():
     text("Instructions", 100, 150)
     textSize(text_play)
     text("Play", 100, 200)
+    global leader_boards, text_leaderboards
+    textSize(text_leaderboards)
+    text("Leaderboard", 100, 250)
+    
+    if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
+        text_leaderboards = 50
+    else:
+        text_leaderboards = 30
+    if leader_boards is True:
+        background(255)
+        for graph_x in range(0, 801, 400):
+            for graph_y in range(100, 401, 40):
+                fill(255)
+                stroke(0)
+                rect(graph_x, graph_y, 400, 40)
+                if mouseX > 700 and mouseX < 800 and mouseY > 400 and mouseY < 500:
+                    back = 10
+                else:
+                    back = 0
+                
+                fill(0)
+                textSize(10 + back)
+                text("<-- BACK", 700, 470)
+                
+                textSize(50)
+                text("Leaderboards", 250, 80)
 
     # instruction
     if mouseX > 100 and mouseX < 270 and mouseY > 100 and mouseY < 150:
@@ -168,6 +196,7 @@ def draw():
         textSize(10 + back)
         text("<-- BACK", 720, 450)
 
+    
     # play
     if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY < 200:
         text_play = 50
@@ -199,13 +228,13 @@ def draw():
             fill(0, 100, 255)
             rect(sky_pos.x, sky_pos.y, 800, 200)
             
-            fans.resize(0, 280)
-            image(fans, 0, 0)
-            fill(200, 10, 10, 60)
-            rect(0, 0, 400, 300)
-            image(fans, 400, 0)
-            fill(10, 10, 200, 60)
-            rect(400, 0, 400, 200)
+            # fans.resize(0, 280)
+            # image(fans, 0, 0)
+            # fill(200, 10, 10, 60)
+            # rect(0, 0, 400, 300)
+            # image(fans, 400, 0)
+            # fill(10, 10, 200, 60)
+            # rect(400, 0, 400, 200)
 
             
             # grass
@@ -213,9 +242,9 @@ def draw():
             fill(100, 255, 0)
             rect(grass_pos.x, grass_pos.y, 800, 300)
 
-            ad.resize(0, 50)
-            for x in range(0, width, 100):
-                image(ad, x, 150)
+            ad.resize(0, 40)
+            for x in range(0, width, 80):
+                image(ad, x, 160)
 
             # Power Arrow
             fill(0)
@@ -364,6 +393,7 @@ def draw():
                 if ball_pos.x > net_pos.x + ball_radius and ball_pos.x < (net_pos.x + 204) - ball_radius and ball_pos.y > net_pos.y + ball_radius and ball_pos.y < (net_pos.y + 100) - ball_radius and abs(ball_to_gk_dist) > ball_radius + gk_radius and click_number == 3 and height_status == False and power_status == False:
                     textSize(32)
                     text("GOAL", 360, 200)
+                    fill(255)
                     text("next", 700, 50)
                     next = True
                     # if next is True:
@@ -379,6 +409,7 @@ def draw():
                 elif (ball_pos.x < net_pos.x + ball_radius or ball_pos.x > (net_pos.x + 204) - ball_radius or ball_pos.y < net_pos.y + ball_radius or ball_pos.y > (net_pos.y + 100) - ball_radius or abs(ball_to_gk_dist) < ball_radius + gk_radius) and click_number == 3 and height_status == False and power_status == False:
                     textSize(32)
                     text("MISS", 360, 200)
+                    fill(255)
                     text("next", 700, 50)
                     next = True
                     if player_miss_once == False:
@@ -392,11 +423,11 @@ def draw():
             ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
             
             # score
-            fill(0)
+            fill(255)
             textSize(20)
             text("Player:" + str(score_player), 10, 20)
             
-            fill(0)
+            fill(255)
             textSize(20)
             text("CPU:" + str(score_cpu), 730, 20)
         
@@ -609,11 +640,11 @@ def draw():
         # textSize(15 + back)
         # text("<-- Back", 705, 40)
 
-            fill(0)
+            fill(255)
             textSize(20)
             text("Player:" + str(score_player), 10, 20)
             
-            fill(0)
+            fill(255)
             textSize(20)
             text("CPU:" + str(score_cpu), 730, 20)
 
@@ -649,7 +680,7 @@ def draw():
                             textSize(40)
                             text("You Win!", 300, 250)
 
-            
+
 def mousePressed():
     global bad, good, height_point, height_speed
     global aim_point, aim_point1, rotation_speed
@@ -872,4 +903,12 @@ def mouseClicked():
             end_game = False
             score_player = 0
             score_cpu = 0
-            
+    
+    global leader_boards
+    
+    if leader_boards  is False:
+        if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
+            leader_boards = True
+    if leader_boards is True:
+        if mouseX > 700 and mouseX < 800 and mouseY > 400 and mouseY < 500:
+            leader_boards = False
