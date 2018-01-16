@@ -1,0 +1,56 @@
+leader_boards = False
+text_leaderboards = 30
+def setup():
+    size(800, 500)
+    
+def draw():
+    global leader_boards, text_leaderboards
+    
+    background(255)
+    
+    fill(0)
+    textSize(50)
+    text("Menu", 350, 100)
+    
+    textSize(text_leaderboards)
+    text("Leaderboards", 100, 250)
+    
+    if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
+        text_leaderboards = 50
+    else:
+        text_leaderboards = 30
+    
+    if leader_boards is True:
+        background(255)
+        for graph_x in range(0, 801, 400):
+            for graph_y in range(100, 401, 40):
+                fill(255)
+                stroke(0)
+                rect(graph_x, graph_y, 400, 40)
+                if mouseX > 700 and mouseX < 800 and mouseY > 400 and mouseY < 500:
+                    back = 10
+                else:
+                    back = 0
+                
+                fill(0)
+                textSize(10 + back)
+                text("<-- BACK", 700, 470)
+                
+                textSize(50)
+                text("Leaderboards", 250, 80)
+
+def mouseClicked():
+    global leader_boards
+    
+    if leader_boards  is False:
+        if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
+            leader_boards = True
+    if leader_boards is True:
+        if mouseX > 700 and mouseX < 800 and mouseY > 400 and mouseY < 500:
+            leader_boards = False
+            
+            
+
+            
+    
+            
