@@ -228,28 +228,52 @@ def draw():
             fill(0, 100, 255)
             rect(sky_pos.x, sky_pos.y, 800, 200)
             
-            # fans.resize(0, 280)
-            # image(fans, 0, 0)
-            # fill(200, 10, 10, 60)
-            # rect(0, 0, 400, 300)
-            # image(fans, 400, 0)
-            # fill(10, 10, 200, 60)
-            # rect(400, 0, 400, 200)
+            fans.resize(0, 280)
+            image(fans, 0, 0)
+            fill(200, 10, 10, 60)
+            rect(0, 0, 400, 300)
+            image(fans, 400, 0)
+            fill(10, 10, 200, 60)
+            rect(400, 0, 400, 200)
 
             
             # grass
             noStroke()
             fill(100, 255, 0)
             rect(grass_pos.x, grass_pos.y, 800, 300)
-
+            
+            # Lines
+            fill(255)
+            noStroke()
+            rectMode(CENTER)
+            # inner box
+            rect(230, 250, 10, 100)
+            rect(570, 250, 10, 100)
+            rect(400, 295, 350, 10)
+            # outer box
+            rect(100, 320, 10, 300)
+            rect(700, 320, 10, 300)
+            rect(400, 470, 610, 10)
+            fill(255, 255, 255, 0)
+            stroke(255)
+            strokeWeight(10)
+            ellipse(400, 470, 200, 130)
+            fill(100, 255, 0)
+            rectMode(CORNER)
+            noStroke()
+            rect(250, 400, 300, 65)
+            
+            
+            fill(0)
             ad.resize(0, 40)
             for x in range(0, width, 80):
                 image(ad, x, 160)
-
+            
+            rectMode(CORNER)
             # Power Arrow
             fill(0)
             textSize(20)
-            text("Power(3)", power_point.x - 30, 430)
+            text("Power(3)", power_point.x - 45, 430)
             
             fill(0)
             triangle(power_point.x, power_point.y, power_point.x - 25,
@@ -335,7 +359,7 @@ def draw():
             # Aim Line
             fill(0)
             textSize(20)
-            text("Direction(2)", 360, 430)
+            text("Direction(2)", 345, 430)
             
             line(aim_point.x, aim_point.y, aim_point.x +
                  aim_vector.x, aim_point.y + aim_vector.y)
@@ -343,6 +367,10 @@ def draw():
             if line_angle < -180 or line_angle > 0:
                 rotation_speed = -rotation_speed
             aim_vector.rotate(rotation_speed)
+            
+            noStroke()
+            fill(255)
+            ellipse(400, 385, 30, 30)
 
             # ball moving to bottom of net
             if power_point.y < 200:
@@ -388,7 +416,7 @@ def draw():
                         print("touching")
             else:
                 height_status = False
-                
+                fill(0)
                 # goal or miss detection
                 if ball_pos.x > net_pos.x + ball_radius and ball_pos.x < (net_pos.x + 204) - ball_radius and ball_pos.y > net_pos.y + ball_radius and ball_pos.y < (net_pos.y + 100) - ball_radius and abs(ball_to_gk_dist) > ball_radius + gk_radius and click_number == 3 and height_status == False and power_status == False:
                     textSize(32)
@@ -474,12 +502,39 @@ def draw():
             noStroke()
             fill(100, 255, 0)
             rect(grass_pos.x, grass_pos.y, 800, 300)
+            # Lines
+            fill(255)
+            noStroke()
+            rectMode(CENTER)
+            # inner box
+            rect(230, 250, 10, 100)
+            rect(570, 250, 10, 100)
+            rect(400, 295, 350, 10)
+            # outer box
+            rect(100, 320, 10, 300)
+            rect(700, 320, 10, 300)
+            rect(400, 470, 610, 10)
+            fill(255, 255, 255, 0)
+            stroke(255)
+            strokeWeight(10)
+            ellipse(400, 470, 200, 130)
+            fill(100, 255, 0)
+            rectMode(CORNER)
+            noStroke()
+            rect(250, 400, 300, 65)
+            
+            
+            fill(0)
 
             # sky
             noStroke()
             fill(0, 100, 255)
             rect(sky_pos.x, sky_pos.y, 800, 200)
-
+            
+            ad.resize(0, 40)
+            for x in range(0, width, 80):
+                image(ad, x, 160)
+            
             # net
             fill(255)
             stroke(0)
@@ -538,9 +593,9 @@ def draw():
             blue_fan_head_pos.y += jump_speed_blue
 
             fill(0)
-            rect(325, 430, 150, 40)
+            rect(325, 430, 150, 30)
             fill(255)
-            rect(325, 430, time_bar, 40)
+            rect(325, 430, time_bar, 30)
             if comp_shoot is True:
                 time_bar -= time_speed
                 if time_bar <= 0:
@@ -600,6 +655,7 @@ def draw():
                     if red_fan_pos.y > 250:
                         gk_screen_goal = False
                         jump_speed_red = 0
+                        fill(255)
                         text("next", 700, 50)
                         next = True
                     elif red_fan_pos.y >= fan_jump:
@@ -613,6 +669,7 @@ def draw():
                     if blue_fan_pos.y > 250:
                         gk_screen_miss = False
                         jump_speed_blue = 0
+                        fill(255)
                         text("next", 700, 50)
                         next = True
                     elif blue_fan_pos.y >= fan_jump:
@@ -628,17 +685,6 @@ def draw():
             ellipse(cpu_ball_pos.x, cpu_ball_pos.y, cpu_ball_size, cpu_ball_size)
             textSize(20)
             text("Click(1)", 370, 420)
-            
-            # print(click_number)
-        # fill(255)
-        # rect(700, 0, 100, 50)
-        # fill(0)
-        # if mouseX > 700 and mouseY < 50:
-        #     back = 5
-        # else:
-        #     back = 0
-        # textSize(15 + back)
-        # text("<-- Back", 705, 40)
 
             fill(255)
             textSize(20)
