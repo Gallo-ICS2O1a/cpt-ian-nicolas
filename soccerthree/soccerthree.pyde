@@ -343,18 +343,18 @@ def draw():
                 height_speed = height_speed.mult(-1)
 
             # Aim boundary good
-            stroke(0)
+            # stroke(0)
             strokeWeight(2)
-            fill(good)
-            rect(good_aim_rect_pos.x, good_aim_rect_pos.y, 23.75, 60)
+            # fill(good)
+            # rect(good_aim_rect_pos.x, good_aim_rect_pos.y, 23.75, 60)
 
             # Aim boundary bad 1
-            fill(bad)
-            rect(bad_aim_rect_pos1.x, bad_aim_rect_pos1.y, 38.125, 60)
+            # fill(bad)
+            # rect(bad_aim_rect_pos1.x, bad_aim_rect_pos1.y, 38.125, 60)
 
             # Aim boundary bad 2
-            fill(bad)
-            rect(bad_aim_rect_pos2.x, bad_aim_rect_pos2.y, 38.125, 60)
+            # fill(bad)
+            # rect(bad_aim_rect_pos2.x, bad_aim_rect_pos2.y, 38.125, 60)
 
             # Aim Line
             fill(0)
@@ -453,11 +453,11 @@ def draw():
             # score
             fill(255)
             textSize(20)
-            text("Player:" + str(score_player), 10, 20)
+            text("Player: " + str(score_player), 10, 20)
             
             fill(255)
             textSize(20)
-            text("CPU:" + str(score_cpu), 730, 20)
+            text("CPU: " + str(score_cpu), 730, 20)
         
             if turn_player == 4:
                 if abs(score_player - score_cpu) >= 3:
@@ -952,7 +952,7 @@ def mouseClicked():
     
     global leader_boards
     
-    if leader_boards  is False:
+    if leader_boards is False:
         if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
             leader_boards = True
     if leader_boards is True:
