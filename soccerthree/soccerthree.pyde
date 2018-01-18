@@ -116,6 +116,9 @@ comp_shoot = False
 
 leader_boards = False
 text_leaderboards = 30
+
+add_library("sound")
+
 def setup():
     size(800, 500)
     global soccer_background
@@ -124,6 +127,12 @@ def setup():
     fans = loadImage("bleacher fans.jpg")
     global ad
     ad = loadImage("soccer ad.jpeg")
+
+    global win
+    # win = SoundFile(this, "file_name.type")
+    global lose
+    # lose = SoundFile(this, "file_name.type")
+
 def draw():
     # print(time_bar)
     global instruction, text_play, filler
@@ -466,9 +475,15 @@ def draw():
                     if max(score_player, score_cpu) is score_cpu:
                         textSize(40)
                         text("You Lose!", 300, 250)
+                        
+                        sf.play()
+                                                
                     elif max(score_player, score_cpu) is score_player:
                         textSize(40)
                         text("You Win!", 300, 250)
+                        
+                        sf.play()
+            
             elif turn_player == 5:
                 if abs(score_player - score_cpu) >= 2:
                     winner = max(score_player, score_cpu)
@@ -476,9 +491,14 @@ def draw():
                     if max(score_player, score_cpu) is score_cpu:
                         textSize(40)
                         text("You Lose!", 300, 250)
+                        
+                        sf.play()
+                        
                     elif max(score_player, score_cpu) is score_player:
                         textSize(40)
                         text("You Win!", 300, 250)
+                        
+                        sf.play()
 
         elif player_shooting is not True:
             # click_number = 1
