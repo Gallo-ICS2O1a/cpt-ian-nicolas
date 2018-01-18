@@ -476,13 +476,13 @@ def draw():
                         textSize(40)
                         text("You Lose!", 300, 250)
                         
-                        sf.play()
+                        # lose.play()
                                                 
                     elif max(score_player, score_cpu) is score_player:
                         textSize(40)
                         text("You Win!", 300, 250)
                         
-                        sf.play()
+                        # win.play()
             
             elif turn_player == 5:
                 if abs(score_player - score_cpu) >= 2:
@@ -492,13 +492,13 @@ def draw():
                         textSize(40)
                         text("You Lose!", 300, 250)
                         
-                        sf.play()
+                        # lose.play()
                         
                     elif max(score_player, score_cpu) is score_player:
                         textSize(40)
                         text("You Win!", 300, 250)
                         
-                        sf.play()
+                        # win.play()
 
         elif player_shooting is not True:
             # click_number = 1
