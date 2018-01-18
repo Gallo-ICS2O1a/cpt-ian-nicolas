@@ -113,7 +113,7 @@ net_pos = PVector(298, 100)
 
 time_bar = 150
 time_speed = 1
-go = False
+# go = False
 comp_shoot = False
 
 
@@ -132,13 +132,14 @@ def draw():
     global player_shooting, cpu_shooting
     global cpu_shooting_status, hard_mode, choose_mode
     global time_bar, time_speed, go, comp_shoot
-    background(74, 140, 97)
-    image(soccer_background, 0, 10)
+    background(255)
+    soccer_background.resize(800, 500)
+    image(soccer_background, 0, 0)
     fill(255, 255, 255, 160)
     rect(0, 0, 800, 500)
     fill(0)
     textSize(50)
-    text("Soccer Shoot Out", 220, 100)
+    text("Soccer Shootout", 220, 100)
 
     textSize(text_instruction)
     text("Instructions", 100, 150)
@@ -151,8 +152,8 @@ def draw():
     else:
         text_instruction = 30
     if instruction is True:
-        background(74, 140, 97)
-        image(soccer_background, 0, 10)
+        background(255)
+        image(soccer_background, 0, 0)
         fill(255, 255, 255, 160)
         rect(0, 0, 800, 500)
         fill(0)
@@ -273,10 +274,8 @@ def draw():
                 text("Power(3)", power_point.x - 45, 430)
                 
                 fill(0)
-                triangle(power_point.x, power_point.y, power_point.x - 25,
-                        power_point.y + 15, power_point.x + 25, power_point.y + 15)
-                rect(rect_height_point.x, rect_height_point.y,
-                    rect_height_dim.x, rect_height_dim.y)
+                triangle(power_point.x, power_point.y, power_point.x - 25, power_point.y + 15, power_point.x + 25, power_point.y + 15)
+                rect(rect_height_point.x, rect_height_point.y, rect_height_dim.x, rect_height_dim.y)
     
                 if power_point.y >= 250 or power_point.y <= 175:
                     power_change = power_change.mult(-1)
@@ -329,8 +328,7 @@ def draw():
                 stroke(0)
                 strokeWeight(5)
                 fill(0)
-                line(height_point.x, height_point.y,
-                    height_point.x + 20, height_point.y)
+                line(height_point.x, height_point.y, height_point.x + 20, height_point.y)
     
                 height_point.add(height_speed)
     
@@ -358,8 +356,7 @@ def draw():
                 textSize(20)
                 text("Direction(2)", 360, 430)
                 
-                line(aim_point.x, aim_point.y, aim_point.x +
-                    aim_vector.x, aim_point.y + aim_vector.y)
+                line(aim_point.x, aim_point.y, aim_point.x + aim_vector.x, aim_point.y + aim_vector.y)
                 line_angle = degrees(aim_vector.heading())
                 if line_angle < -180 or line_angle > 0:
                     rotation_speed = -rotation_speed
@@ -378,8 +375,7 @@ def draw():
                                 ball_pos.x += shot_x * 5
                                 # print(ball_pos.y)
                                 # fill(0)
-                                # ellipse(
-                                #     ball_pos.x, ball_pos.y, ball_size, ball_size)
+                                # ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
                                 ball_size = ball_size * 0.98
                                 ball_radius = ball_size / 2
                         else:
@@ -749,66 +745,45 @@ def mousePressed():
                 click_number += 1
                 print(height_point.y)
                 if height_point.y >= 391:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 20)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 20)))))
                 elif height_point.y >= 381:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 19)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 19)))))
                 elif height_point.y >= 371:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 18)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 18)))))
                 elif height_point.y >= 361:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 17)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 17)))))
                 elif height_point.y >= 351:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 16)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 16)))))
                 elif height_point.y >= 341:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 15)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 15)))))
                 elif height_point.y >= 331:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 14)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 14)))))
                 elif height_point.y >= 321:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 13)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 13)))))
                 elif height_point.y >= 311:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 12)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 12)))))
                 elif height_point.y >= 301:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 11)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 11)))))
                 elif height_point.y >= 291:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 10)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 10)))))
                 elif height_point.y >= 281:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 9)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 9)))))
                 elif height_point.y >= 271:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 8)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 8)))))
                 elif height_point.y >= 261:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 7)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 7)))))
                 elif height_point.y >= 251:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 6)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 6)))))
                 elif height_point.y >= 241:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 5)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 5)))))
                 elif height_point.y >= 231:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 4)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 4)))))
                 elif height_point.y >= 221:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 3)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 3)))))
                 elif height_point.y >= 211:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 2)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 2)))))
                 elif height_point.y >= 201:
-                    height_power = PVector(
-                        0, (-(power_location - (115 + (3.5 * 1)))))
-
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 1)))))
                 elif height_point.y == 200:
                     height_power = PVector(0, -80)
                 else:
@@ -830,9 +805,7 @@ def mousePressed():
             elif click_number == 1:
                 rotation_speed = 0
                 aim_x = 400 + aim_vector.x
-                aim = (aim_x - min_aim_point) * \
-                 ((aim_point.x - min_shot_point) /
-                  (aim_point.x - min_aim_point))
+                aim = (aim_x - min_aim_point) * \ ((aim_point.x - min_shot_point) / (aim_point.x - min_aim_point))
                 print(aim)
                 relative_aim = aim - 400
                 shot_x = relative_aim / total_y_distance
