@@ -5,6 +5,8 @@ text_play = 30
 filler = 255
 instruction = False
 play = False
+hard_mode = False
+choose_mode = False
 
 # ball variables
 ball_pos = PVector(400, 385)
@@ -34,7 +36,7 @@ power_miss = 230  # ball power if shot is too short
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(150, 100)
-height_speed = PVector(0, 10)
+height_speed  = PVector(0, 0)
 
 # Aim Bar
 aim_point = PVector(400, 390)
@@ -114,10 +116,6 @@ time_speed = 1
 go = False
 comp_shoot = False
 
-leader_boards = False
-text_leaderboards = 30
-
-add_library("sound")
 
 def setup():
     size(800, 500)
@@ -127,18 +125,12 @@ def setup():
     fans = loadImage("bleacher fans.jpg")
     global ad
     ad = loadImage("soccer ad.jpeg")
-
-    global win
-    # win = SoundFile(this, "file_name.type")
-    global lose
-    # lose = SoundFile(this, "file_name.type")
-
 def draw():
     # print(time_bar)
     global instruction, text_play, filler
     global text_instruction, play
     global player_shooting, cpu_shooting
-    global cpu_shooting_status
+    global cpu_shooting_status, hard_mode, choose_mode
     global time_bar, time_speed, go, comp_shoot
 
     background(filler)
@@ -150,32 +142,6 @@ def draw():
     text("Instructions", 100, 150)
     textSize(text_play)
     text("Play", 100, 200)
-    global leader_boards, text_leaderboards
-    textSize(text_leaderboards)
-    text("Leaderboard", 100, 250)
-    
-    if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
-        text_leaderboards = 50
-    else:
-        text_leaderboards = 30
-    if leader_boards is True:
-        background(255)
-        for graph_x in range(0, 801, 400):
-            for graph_y in range(100, 401, 40):
-                fill(255)
-                stroke(0)
-                rect(graph_x, graph_y, 400, 40)
-                if mouseX > 700 and mouseX < 800 and mouseY > 400 and mouseY < 500:
-                    back = 10
-                else:
-                    back = 0
-                
-                fill(0)
-                textSize(10 + back)
-                text("<-- BACK", 700, 470)
-                
-                textSize(50)
-                text("Leaderboards", 250, 80)
 
     # instruction
     if mouseX > 100 and mouseX < 270 and mouseY > 100 and mouseY < 150:
@@ -211,511 +177,268 @@ def draw():
         text_play = 50
     else:
         text_play = 30
-
     if play is True:
-        if player_shooting is True:
-            background(100, 255, 10)
-            global click_number, gk_pos, gk_size, ball_radius, gk_radius
-            global power_point, rect_height_point, rect_height_dim, power_change
-            global power_location, power_status, turn_player, turn_gk
-            global ball_pos, ball_size, shot_y, shot_x, play
-            global bad, good, height_point, height_speed, height_power, height_status
-            global net_pos, distance_to_net, aim, dive_x, dive_y
-            global aim_point, aim_vector, rotation_speed, bad_aim_rect_pos1, good_aim_rect_pos, bad_aim_rect_pos2
-            global diving_distance_x, is_gk_diving, diving_side, diving_height
-            global grass_pos, sky_pos, power_miss, end_game
-            global player_score_once, player_miss_once
-            global next, score_player, score_cpu
-            ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
-            ball_to_gk_dist = ball_to_gk_vect.mag()
-            ball_radius = ball_size / 2
-
+        if choose_mode is False:
             background(255)
-            print(turn_player, turn_gk)
-             # sky
-            noStroke()
-            fill(0, 100, 255)
-            rect(sky_pos.x, sky_pos.y, 800, 200)
+            textSize(50)
+            text("Difficulty", 300, 100)
             
-            fans.resize(0, 280)
-            image(fans, 0, 0)
-            fill(200, 10, 10, 60)
-            rect(0, 0, 400, 300)
-            image(fans, 400, 0)
-            fill(10, 10, 200, 60)
-            rect(400, 0, 400, 200)
-
-            
-            # grass
-            noStroke()
-            fill(100, 255, 0)
-            rect(grass_pos.x, grass_pos.y, 800, 300)
-            
-            # Lines
-            fill(255)
-            noStroke()
-            rectMode(CENTER)
-            # inner box
-            rect(230, 250, 10, 100)
-            rect(570, 250, 10, 100)
-            rect(400, 295, 350, 10)
-            # outer box
-            rect(100, 320, 10, 300)
-            rect(700, 320, 10, 300)
-            rect(400, 470, 610, 10)
-            fill(255, 255, 255, 0)
-            stroke(255)
-            strokeWeight(10)
-            ellipse(400, 470, 200, 130)
-            fill(100, 255, 0)
-            rectMode(CORNER)
-            noStroke()
-            rect(250, 400, 300, 65)
-            
-            
-            fill(0)
-            ad.resize(0, 40)
-            for x in range(0, width, 80):
-                image(ad, x, 160)
-            
-            rectMode(CORNER)
-            # Power Arrow
-            fill(0)
-            textSize(20)
-            text("Power(3)", power_point.x - 45, 430)
-            
-            fill(0)
-            triangle(power_point.x, power_point.y, power_point.x - 25,
-                     power_point.y + 15, power_point.x + 25, power_point.y + 15)
-            rect(rect_height_point.x, rect_height_point.y,
-                 rect_height_dim.x, rect_height_dim.y)
-
-            if power_point.y >= 250 or power_point.y <= 175:
-                power_change = power_change.mult(-1)
-
-            power_point.add(power_change)
-            rect_height_dim = PVector(15, -(265 - power_point.y - 15))
-
-            # net
-            fill(255)
-            stroke(0)
-            strokeWeight(2)
-            rect(net_pos.x, net_pos.y, 204, 100)
-
-            # goalkeeper
-            fill(255, 0, 0)
-            noStroke()
-            ellipse(gk_pos.x, gk_pos.y, gk_size, gk_size)
-
-            # gk random diving
-            if click_number == 3:
-                if is_gk_diving <= 2:  # no movement
-                    gk_pos.x = gk_pos.x
-                    gk_pos.y = gk_pos.y
-                elif is_gk_diving >= 3:  # movement
-                    if diving_side == 0:  # dive left
-                        if gk_pos.x >= gk_initial_pos.x - diving_distance_x:
-                            gk_pos.x -= dive_x
-                        if gk_pos.y >= gk_initial_pos.y - diving_height:
-                            gk_pos.y -= dive_y
-
-                    elif diving_side == 1:
-                        if gk_pos.x <= gk_initial_pos.x + diving_distance_x:
-                            gk_pos.x += dive_x
-                        if gk_pos.y >= gk_initial_pos.y - diving_height:
-                            gk_pos.y -= dive_y
-
-            # Height Bar
-            fill(0)
-            textSize(20)
-            text("Height(1)", 125, 430)
-            
-            stroke(0)
-            strokeWeight(2)
-            fill(bad)
-            rect(150, 0, 20, 200)
-
-            fill(good)
-            rect(150, 200, 20, 200)
-
-            stroke(0)
-            strokeWeight(5)
-            fill(0)
-            line(height_point.x, height_point.y,
-                 height_point.x + 20, height_point.y)
-
-            height_point.add(height_speed)
-
-            if height_point.y >= 400:
-                height_speed = height_speed.mult(-1)
-            elif height_point.y <= 0:
-                height_speed = height_speed.mult(-1)
-
-            # Aim boundary good
-            # stroke(0)
-            strokeWeight(2)
-            # fill(good)
-            # rect(good_aim_rect_pos.x, good_aim_rect_pos.y, 23.75, 60)
-
-            # Aim boundary bad 1
-            # fill(bad)
-            # rect(bad_aim_rect_pos1.x, bad_aim_rect_pos1.y, 38.125, 60)
-
-            # Aim boundary bad 2
-            # fill(bad)
-            # rect(bad_aim_rect_pos2.x, bad_aim_rect_pos2.y, 38.125, 60)
-
-            # Aim Line
-            fill(0)
-            textSize(20)
-            text("Direction(2)", 345, 430)
-            
-            line(aim_point.x, aim_point.y, aim_point.x +
-                 aim_vector.x, aim_point.y + aim_vector.y)
-            line_angle = degrees(aim_vector.heading())
-            if line_angle < -180 or line_angle > 0:
-                rotation_speed = -rotation_speed
-            aim_vector.rotate(rotation_speed)
-            
-            noStroke()
-            fill(255)
-            ellipse(400, 385, 30, 30)
-
-            # ball moving to bottom of net
-            if power_point.y < 200:
-                if click_number == 3:
-                    if ball_pos.y >= 184:
-                        power_status = True
-                        if power_location + height_power.y == 185:
-                            if ball_pos.y <= 190:
-                                power_status = False
-                        if power_status == True:
-                            ball_pos.y -= shot_y * 5
-                            ball_pos.x += shot_x * 5
-                            # print(ball_pos.y)
-                            # fill(0)
-                            # ellipse(
-                            #     ball_pos.x, ball_pos.y, ball_size, ball_size)
-                            ball_size = ball_size * 0.98
-                            ball_radius = ball_size / 2
-                    else:
-                        power_status = False
-            else:
-                if click_number == 3:
-                    if ball_pos.y >= power_miss:
-                        power_status = True
-                        if power_status == True:
-                            ball_pos.y -= shot_y * 5
-                            ball_pos.x += shot_x * 5
-                            # fill(0)
-                            # ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
-                            ball_size = ball_size * 0.98
-                    else:
-                        power_status = False
-            
-            # ball moving up the net
-            if ball_pos.y <= 185 and ball_pos.y > power_location + height_power.y and power_status == False:
-                height_status = True
-                # print(ball_to_gk_dist)
-                print(abs(ball_to_gk_dist), ball_radius + gk_radius)
-                if height_status == True:
-                    ball_pos.y -= shot_y * 5
-                    ball_pos.x += shot_x * 5
-                    if abs(ball_to_gk_dist) <= ball_radius + gk_radius:
-                        print("touching")
-            else:
-                height_status = False
-                fill(0)
-                # goal or miss detection
-                if ball_pos.x > net_pos.x + ball_radius and ball_pos.x < (net_pos.x + 204) - ball_radius and ball_pos.y > net_pos.y + ball_radius and ball_pos.y < (net_pos.y + 100) - ball_radius and abs(ball_to_gk_dist) > ball_radius + gk_radius and click_number == 3 and height_status == False and power_status == False:
-                    textSize(32)
-                    text("GOAL", 360, 200)
-                    fill(255)
-                    text("next", 700, 50)
-                    next = True
-                    # if next is True:
-                    #     player_shooting = False
-                    # play_shooting = False
-                    if player_score_once == False:
-                        score_player += 1
-                        turn_player += 1
-                        player_score_once = True
-                    else:
-                        score_player += 0
-                    
-                elif (ball_pos.x < net_pos.x + ball_radius or ball_pos.x > (net_pos.x + 204) - ball_radius or ball_pos.y < net_pos.y + ball_radius or ball_pos.y > (net_pos.y + 100) - ball_radius or abs(ball_to_gk_dist) < ball_radius + gk_radius) and click_number == 3 and height_status == False and power_status == False:
-                    textSize(32)
-                    text("MISS", 360, 200)
-                    fill(255)
-                    text("next", 700, 50)
-                    next = True
-                    if player_miss_once == False:
-                        turn_player += 1
-                        player_miss_once = True
-                    # if next is True:
-                        # player_shooting = False
-
-            # ball
-            fill(0)
-            ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
-            
-            # score
-            fill(255)
-            textSize(20)
-            text("Player: " + str(score_player), 10, 20)
-            
-            fill(255)
-            textSize(20)
-            text("CPU: " + str(score_cpu), 730, 20)
+            textSize(30)
+            text("Easy", 100, 150)
+            text("Hard", 100, 200)
         
-            if turn_player == 4:
-                if abs(score_player - score_cpu) >= 3:
-                    winner = max(score_player, score_cpu)
-                    end_game = True
-                    if max(score_player, score_cpu) is score_cpu:
-                        textSize(40)
-                        text("You Lose!", 300, 250)
-                        
-                        # lose.play()
-                                                
-                    elif max(score_player, score_cpu) is score_player:
-                        textSize(40)
-                        text("You Win!", 300, 250)
-                        
-                        # win.play()
-            
-            elif turn_player == 5:
-                if abs(score_player - score_cpu) >= 2:
-                    winner = max(score_player, score_cpu)
-                    end_game = True
-                    if max(score_player, score_cpu) is score_cpu:
-                        textSize(40)
-                        text("You Lose!", 300, 250)
-                        
-                        # lose.play()
-                        
-                    elif max(score_player, score_cpu) is score_player:
-                        textSize(40)
-                        text("You Win!", 300, 250)
-                        
-                        # win.play()
-
-        elif player_shooting is not True:
-            # click_number = 1
-            global turn_player, turn_gk, cpu_miss_once
-            global grass_pos, sky_pos, net_pos, gk_size, gk_pos
-            global dive_choice, dive_pos, ball_x_movement_pos, ball_y_movement_pos, ball_power
-            global ball_power, cpu_shot_x, cpu_shot_y, ball_distance, cpu_shooting_status
-            global start_shooting, start_shooting, jump_speed_red, jump_speed_blue, red_fan_head_pos, blue_fan_head_pos, head_size
-            global gk_screen_goal, gk_screen_miss, click_number, cpu_goal, end_game
-            global cpu_ball_pos, fan_size, blue_fan_pos, fan_jump, red_fan_pos
-            global cpu_ball_size , cpu_ball_radius, cpu_score_once, score_player, score_cpu
-            global comp_shoot, time_bar, time_speed
-            
-            cpu_ball_radius = cpu_ball_size / 2
-            ball_to_gk_vect2 = PVector.sub(cpu_ball_pos, dive_pos)
-            ball_to_gk_dist2 = ball_to_gk_vect2.mag()
-
-            background(255)
-
-            # grass
-            noStroke()
-            fill(100, 255, 0)
-            rect(grass_pos.x, grass_pos.y, 800, 300)
-            # Lines
-            fill(255)
-            noStroke()
-            rectMode(CENTER)
-            # inner box
-            rect(230, 250, 10, 100)
-            rect(570, 250, 10, 100)
-            rect(400, 295, 350, 10)
-            # outer box
-            rect(100, 320, 10, 300)
-            rect(700, 320, 10, 300)
-            rect(400, 470, 610, 10)
-            fill(255, 255, 255, 0)
-            stroke(255)
-            strokeWeight(10)
-            ellipse(400, 470, 200, 130)
-            fill(100, 255, 0)
-            rectMode(CORNER)
-            noStroke()
-            rect(250, 400, 300, 65)
-            
-            
-            fill(0)
-
-            # sky
-            noStroke()
-            fill(0, 100, 255)
-            rect(sky_pos.x, sky_pos.y, 800, 200)
-            
-            ad.resize(0, 40)
-            for x in range(0, width, 80):
-                image(ad, x, 160)
-            
-            # net
-            fill(255)
-            stroke(0)
-            strokeWeight(2)
-            rect(net_pos.x, net_pos.y, 204, 100)
-
-            # gk blue outline/fill
-            if dive_choice is True:
-                # ellipse(mouseX, mouseY, 50, 50)
+            # print(mouseX, mouseY)
+        elif choose_mode is True:
+            if player_shooting is True:
+                background(100, 255, 10)
+                global click_number, gk_pos, gk_size, ball_radius, gk_radius
+                global power_point, rect_height_point, rect_height_dim, power_change
+                global power_location, power_status, turn_player, turn_gk
+                global ball_pos, ball_size, shot_y, shot_x, play
+                global bad, good, height_point, height_speed, height_power, height_status
+                global net_pos, distance_to_net, aim, dive_x, dive_y
+                global aim_point, aim_vector, rotation_speed, bad_aim_rect_pos1, good_aim_rect_pos, bad_aim_rect_pos2
+                global diving_distance_x, is_gk_diving, diving_side, diving_height
+                global grass_pos, sky_pos, power_miss, end_game
+                global player_score_once, player_miss_once
+                global next, score_player, score_cpu
+                ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
+                ball_to_gk_dist = ball_to_gk_vect.mag()
+                ball_radius = ball_size / 2
+                
+                background(255)
+                print(turn_player, turn_gk)
+                # sky
+                noStroke()
+                fill(0, 100, 255)
+                rect(sky_pos.x, sky_pos.y, 800, 200)
+                
+                # fans.resize(0, 280)
+                # image(fans, 0, 0)
+                # fill(200, 10, 10, 60)
+                # rect(0, 0, 400, 300)
+                # image(fans, 400, 0)
+                # fill(10, 10, 200, 60)
+                # rect(400, 0, 400, 200)
+    
+                
+                # grass
+                noStroke()
+                fill(100, 255, 0)
+                rect(grass_pos.x, grass_pos.y, 800, 300)
+                # Lines
                 fill(255)
-                stroke(0, 0, 200)
-                ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
+                noStroke()
+                rectMode(CENTER)
+                # inner box
+                rect(230, 250, 10, 100)
+                rect(570, 250, 10, 100)
+                rect(400, 295, 350, 10)
+                # outer box
+                rect(100, 320, 10, 300)
+                rect(700, 320, 10, 300)
+                rect(400, 470, 610, 10)
+                fill(255, 255, 255, 0)
+                stroke(255)
+                strokeWeight(10)
+                ellipse(400, 470, 200, 130)
+                fill(100, 255, 0)
+                rectMode(CORNER)
+                noStroke()
+                rect(250, 400, 300, 65)
+                # stroke(0)
+                
+                
+                ad.resize(0, 40)
+                for i in range(0, width, 80):
+                    image(ad, i, 160)
+    
+                # Power Arrow
                 fill(0)
                 textSize(20)
-                text("Click(2)", 370, 140)
-            elif dive_choice is False:
-                fill(0, 0, 200)
-                ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
-                # dive_choice = False
-            
-            # Red, cpu fan sign
-            fill(255)
-            stroke(0)
-            rect(0, 350, 90, 30)
-            fill(0)
-            textSize(18)
-            text("CPU fans", 1, 370)
-            
-            # red fans
-            fill(red_team)
-            noStroke()
-            for x in range(0, 61, 30):
-                for y in range(205, 276, 70):
-                    ellipse(red_fan_pos.x + x, red_fan_pos.y + y - 205, fan_size.x, fan_size.y)
-                    ellipse(red_fan_head_pos.x + x, red_fan_head_pos.y + y - 205, head_size.x, head_size.y)
-            red_fan_pos.y += jump_speed_red
-            red_fan_head_pos.y += jump_speed_red
-            
-            # Blue, player fan sign
-            fill(255)
-            stroke(0)
-            rect(710, 350, 90, 30)
-            fill(0)
-            textSize(18)
-            text("Player fans", 711, 370)
-            
-            # blue fan variables
-            fill(blue_team)
-            noStroke()
-            for x in range(710, 771, 30):
-                for y in range(205, 276, 70):
-                    ellipse(blue_fan_pos.x + x - 710, blue_fan_pos.y + y - 205, fan_size.x, fan_size.y)
-                    ellipse(blue_fan_head_pos.x + x - 710, blue_fan_head_pos.y + y - 205, head_size.x, head_size.y)
-        
-            blue_fan_pos.y += jump_speed_blue
-            blue_fan_head_pos.y += jump_speed_blue
-
-            fill(0)
-            rect(325, 430, 150, 30)
-            fill(255)
-            rect(325, 430, time_bar, 30)
-            if comp_shoot is True:
-                time_bar -= time_speed
-                if time_bar <= 0:
-                    time_speed = 0
-                    cpu_shooting_status = True
-                    start_shooting = True
-                    cpu_shooting_status = True
-            
-            if start_shooting is True:
-                # cpu random shot generation
-                if cpu_shooting_status == True:
-                    if ball_power == 0:
-                        ball_y_movement_pos = 250
-                        if cpu_ball_pos.y >= ball_y_movement_pos:
-                            cpu_ball_pos.x += (cpu_shot_x * 8)
-                            cpu_ball_pos.y -= (cpu_shot_y * 8)
-                            cpu_ball_size *= 0.97
+                text("Power(3)", power_point.x - 45, 430)
+                
+                fill(0)
+                triangle(power_point.x, power_point.y, power_point.x - 25,
+                        power_point.y + 15, power_point.x + 25, power_point.y + 15)
+                rect(rect_height_point.x, rect_height_point.y,
+                    rect_height_dim.x, rect_height_dim.y)
+    
+                if power_point.y >= 250 or power_point.y <= 175:
+                    power_change = power_change.mult(-1)
+    
+                power_point.add(power_change)
+                rect_height_dim = PVector(15, -(265 - power_point.y - 15))
+    
+                # net
+                fill(255)
+                stroke(0)
+                strokeWeight(2)
+                rect(net_pos.x, net_pos.y, 204, 100)
+    
+                # goalkeeper
+                fill(255, 0, 0)
+                noStroke()
+                ellipse(gk_pos.x, gk_pos.y, gk_size, gk_size)
+    
+                # gk random diving
+                if click_number == 3:
+                    if is_gk_diving <= 2:  # no movement
+                        gk_pos.x = gk_pos.x
+                        gk_pos.y = gk_pos.y
+                    elif is_gk_diving >= 3:  # movement
+                        if diving_side == 0:  # dive left
+                            if gk_pos.x >= gk_initial_pos.x - diving_distance_x:
+                                gk_pos.x -= dive_x
+                            if gk_pos.y >= gk_initial_pos.y - diving_height:
+                                gk_pos.y -= dive_y
+    
+                        elif diving_side == 1:
+                            if gk_pos.x <= gk_initial_pos.x + diving_distance_x:
+                                gk_pos.x += dive_x
+                            if gk_pos.y >= gk_initial_pos.y - diving_height:
+                                gk_pos.y -= dive_y
+    
+                # Height Bar
+                fill(0)
+                textSize(20)
+                text("Height(1)", 125, 430)
+                
+                stroke(0)
+                strokeWeight(2)
+                fill(bad)
+                rect(150, 0, 20, 200)
+    
+                fill(good)
+                rect(150, 200, 20, 200)
+    
+                stroke(0)
+                strokeWeight(5)
+                fill(0)
+                line(height_point.x, height_point.y,
+                    height_point.x + 20, height_point.y)
+    
+                height_point.add(height_speed)
+    
+                if height_point.y >= 400:
+                    height_speed = height_speed.mult(-1)
+                elif height_point.y <= 0:
+                    height_speed = height_speed.mult(-1)
+    
+                # Aim boundary good
+                stroke(0)
+                strokeWeight(2)
+                fill(good)
+                rect(good_aim_rect_pos.x, good_aim_rect_pos.y, 23.75, 60)
+    
+                # Aim boundary bad 1
+                fill(bad)
+                rect(bad_aim_rect_pos1.x, bad_aim_rect_pos1.y, 38.125, 60)
+    
+                # Aim boundary bad 2
+                fill(bad)
+                rect(bad_aim_rect_pos2.x, bad_aim_rect_pos2.y, 38.125, 60)
+    
+                # Aim Line
+                fill(0)
+                textSize(20)
+                text("Direction(2)", 360, 430)
+                
+                line(aim_point.x, aim_point.y, aim_point.x +
+                    aim_vector.x, aim_point.y + aim_vector.y)
+                line_angle = degrees(aim_vector.heading())
+                if line_angle < -180 or line_angle > 0:
+                    rotation_speed = -rotation_speed
+                aim_vector.rotate(rotation_speed)
+    
+                # ball moving to bottom of net
+                if power_point.y < 200:
+                    if click_number == 3:
+                        if ball_pos.y >= 184:
+                            power_status = True
+                            if power_location + height_power.y == 185:
+                                if ball_pos.y <= 190:
+                                    power_status = False
+                            if power_status == True:
+                                ball_pos.y -= shot_y * 5
+                                ball_pos.x += shot_x * 5
+                                # print(ball_pos.y)
+                                # fill(0)
+                                # ellipse(
+                                #     ball_pos.x, ball_pos.y, ball_size, ball_size)
+                                ball_size = ball_size * 0.98
+                                ball_radius = ball_size / 2
                         else:
-                            cpu_shooting_status = False
-                    elif ball_power >= 1:
-                        if cpu_ball_pos.y >= ball_y_movement_pos:
-                            cpu_ball_pos.x += (cpu_shot_x * 8)
-                            cpu_ball_pos.y -= (cpu_shot_y * 8)
-                            cpu_ball_size *= 0.97
+                            power_status = False
+                else:
+                    if click_number == 3:
+                        if ball_pos.y >= power_miss:
+                            power_status = True
+                            if power_status == True:
+                                ball_pos.y -= shot_y * 5
+                                ball_pos.x += shot_x * 5
+                                # fill(0)
+                                # ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+                                ball_size = ball_size * 0.98
                         else:
-                            cpu_shooting_status = False
-
-                if (cpu_ball_pos.x > net_pos.x + cpu_ball_radius and cpu_ball_pos.x < (net_pos.x + 204) - cpu_ball_radius and cpu_ball_pos.y > net_pos.y + cpu_ball_radius and cpu_ball_pos.y < (net_pos.y + 100) - cpu_ball_radius and abs(ball_to_gk_dist2) > (cpu_ball_radius + gk_radius) and click_number >= 1 and click_number <= 2 and cpu_shooting_status == False) or cpu_goal == True:
-                    # print("goal")
-                    fill(0)
-                    textSize(32)
-                    text("GOAL", 360, 200)
-                    gk_screen_goal = True
-                    cpu_goal = True
-                    if cpu_score_once == False:
-                        score_cpu += 1
-                        turn_gk += 1
-                        cpu_score_once = True
-                        # print(abs(ball_to_gk_dist2))
-                    else:
-                        # text("next", 700, 50)
-                        # next = True
-                        score_cpu += 0
-                elif (cpu_ball_pos.x <= net_pos.x + cpu_ball_radius or cpu_ball_pos.x >= (net_pos.x + 204) - cpu_ball_radius or cpu_ball_pos.y <= net_pos.y + cpu_ball_radius or cpu_ball_pos.y >= (net_pos.y + 100) - cpu_ball_radius or abs(ball_to_gk_dist2) <= (cpu_ball_radius + gk_radius)) and click_number >= 1 and click_number <= 2 and cpu_shooting_status == False and cpu_goal == False:
-                    textSize(32)
-                    fill(0)
-                    text("MISS", 360, 200)
-                    gk_screen_miss = True
-                    if cpu_miss_once == False:
-                        turn_gk += 1
-                        cpu_miss_once = True
-                    # text("next", 700, 50)
-                    # next = True
-
-                # red fan jump
-                if gk_screen_goal == True:
-                    if red_fan_pos.y > 250:
-                        gk_screen_goal = False
-                        jump_speed_red = 0
+                            power_status = False
+                
+                # ball moving up the net
+                if ball_pos.y <= 185 and ball_pos.y > power_location + height_power.y and power_status == False:
+                    height_status = True
+                    # print(ball_to_gk_dist)
+                    print(abs(ball_to_gk_dist), ball_radius + gk_radius)
+                    if height_status == True:
+                        ball_pos.y -= shot_y * 5
+                        ball_pos.x += shot_x * 5
+                        if abs(ball_to_gk_dist) <= ball_radius + gk_radius:
+                            print("touching")
+                else:
+                    height_status = False
+                    
+                    # goal or miss detection
+                    if ball_pos.x > net_pos.x + ball_radius and ball_pos.x < (net_pos.x + 204) - ball_radius and ball_pos.y > net_pos.y + ball_radius and ball_pos.y < (net_pos.y + 100) - ball_radius and abs(ball_to_gk_dist) > ball_radius + gk_radius and click_number == 3 and height_status == False and power_status == False:
+                        textSize(32)
+                        text("GOAL", 360, 200)
                         fill(255)
                         text("next", 700, 50)
                         next = True
-                    elif red_fan_pos.y >= fan_jump:
-                        if jump_speed_red == 0:
-                            jump_speed_red = -1
-                    elif red_fan_pos.y < fan_jump:
-                        if jump_speed_red == -1:
-                            jump_speed_red = 1
-                # blue fan jump        
-                elif gk_screen_miss == True:
-                    if blue_fan_pos.y > 250:
-                        gk_screen_miss = False
-                        jump_speed_blue = 0
+                        # if next is True:
+                        #     player_shooting = False
+                        # play_shooting = False
+                        if player_score_once == False:
+                            score_player += 1
+                            turn_player += 1
+                            player_score_once = True
+                        else:
+                            score_player += 0
+                        
+                    elif (ball_pos.x < net_pos.x + ball_radius or ball_pos.x > (net_pos.x + 204) - ball_radius or ball_pos.y < net_pos.y + ball_radius or ball_pos.y > (net_pos.y + 100) - ball_radius or abs(ball_to_gk_dist) < ball_radius + gk_radius) and click_number == 3 and height_status == False and power_status == False:
+                        textSize(32)
+                        text("MISS", 360, 200)
                         fill(255)
                         text("next", 700, 50)
                         next = True
-                    elif blue_fan_pos.y >= fan_jump:
-                        if jump_speed_blue == 0:
-                            jump_speed_blue = -1
-                    elif blue_fan_pos.y < fan_jump:
-                        if jump_speed_blue == -1:
-                            jump_speed_blue = 1
-
-            # cpu ball
-            fill(0)
-            stroke(0)
-            ellipse(cpu_ball_pos.x, cpu_ball_pos.y, cpu_ball_size, cpu_ball_size)
-            textSize(20)
-            text("Click(1)", 370, 420)
-
-            fill(255)
-            textSize(20)
-            text("Player:" + str(score_player), 10, 20)
+                        if player_miss_once == False:
+                            turn_player += 1
+                            player_miss_once = True
+                        # if next is True:
+                            # player_shooting = False
+    
+                # ball
+                fill(0)
+                ellipse(ball_pos.x, ball_pos.y, ball_size, ball_size)
+                
+                # score
+                fill(255)
+                textSize(20)
+                text("Player:" + str(score_player), 10, 20)
+                
+                fill(255)
+                textSize(20)
+                text("CPU:" + str(score_cpu), 730, 20)
             
-            fill(255)
-            textSize(20)
-            text("CPU:" + str(score_cpu), 730, 20)
-
-            if play == True:
-                if turn_gk == 3:
+                if turn_player == 4:
                     if abs(score_player - score_cpu) >= 3:
                         winner = max(score_player, score_cpu)
                         end_game = True
@@ -725,18 +448,8 @@ def draw():
                         elif max(score_player, score_cpu) is score_player:
                             textSize(40)
                             text("You Win!", 300, 250)
-                elif turn_gk == 4:
+                elif turn_player == 5:
                     if abs(score_player - score_cpu) >= 2:
-                        end_game = True
-                        winner = max(score_player, score_cpu)
-                        if max(score_player, score_cpu) is score_cpu:
-                            textSize(40)
-                            text("You Lose!", 300, 250)
-                        elif max(score_player, score_cpu) is score_player:
-                            textSize(40)
-                            text("You Win!", 300, 250)
-                elif turn_gk >= 5:
-                    if abs(score_player - score_cpu) >= 1:
                         winner = max(score_player, score_cpu)
                         end_game = True
                         if max(score_player, score_cpu) is score_cpu:
@@ -746,6 +459,263 @@ def draw():
                             textSize(40)
                             text("You Win!", 300, 250)
 
+            elif player_shooting is not True:
+                # click_number = 1
+                global turn_player, turn_gk, cpu_miss_once
+                global grass_pos, sky_pos, net_pos, gk_size, gk_pos
+                global dive_choice, dive_pos, ball_x_movement_pos, ball_y_movement_pos, ball_power
+                global ball_power, cpu_shot_x, cpu_shot_y, ball_distance, cpu_shooting_status
+                global start_shooting, start_shooting, jump_speed_red, jump_speed_blue, red_fan_head_pos, blue_fan_head_pos, head_size
+                global gk_screen_goal, gk_screen_miss, click_number, cpu_goal, end_game
+                global cpu_ball_pos, fan_size, blue_fan_pos, fan_jump, red_fan_pos
+                global cpu_ball_size , cpu_ball_radius, cpu_score_once, score_player, score_cpu
+                global comp_shoot, time_bar, time_speed
+                
+                cpu_ball_radius = cpu_ball_size / 2
+                ball_to_gk_vect2 = PVector.sub(cpu_ball_pos, dive_pos)
+                ball_to_gk_dist2 = ball_to_gk_vect2.mag()
+    
+                background(255)
+    
+                # grass
+                noStroke()
+                fill(100, 255, 0)
+                rect(grass_pos.x, grass_pos.y, 800, 300)
+                
+                rect(grass_pos.x, grass_pos.y, 800, 300)
+                # Lines
+                fill(255)
+                noStroke()
+                rectMode(CENTER)
+                # inner box
+                rect(230, 250, 10, 100)
+                rect(570, 250, 10, 100)
+                rect(400, 295, 350, 10)
+                # outer box
+                rect(100, 320, 10, 300)
+                rect(700, 320, 10, 300)
+                rect(400, 470, 610, 10)
+                fill(255, 255, 255, 0)
+                stroke(255)
+                strokeWeight(10)
+                ellipse(400, 470, 200, 130)
+                fill(100, 255, 0)
+                rectMode(CORNER)
+                noStroke()
+                rect(250, 400, 300, 65)
+
+    
+                # sky
+                noStroke()
+                fill(0, 100, 255)
+                rect(sky_pos.x, sky_pos.y, 800, 200)
+                
+                ad.resize(0, 40)
+                for x in range(0, width, 80):
+                    image(ad, x, 160)
+    
+                # net
+                fill(255)
+                stroke(0)
+                strokeWeight(2)
+                rect(net_pos.x, net_pos.y, 204, 100)
+    
+                # gk blue outline/fill
+                if dive_choice is True:
+                    # ellipse(mouseX, mouseY, 50, 50)
+                    fill(255)
+                    stroke(0, 0, 200)
+                    ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
+                    fill(0)
+                    textSize(20)
+                    text("Click(2)", 370, 140)
+                elif dive_choice is False:
+                    fill(0, 0, 200)
+                    ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
+                    # dive_choice = False
+                
+                # Red, cpu fan sign
+                fill(255)
+                stroke(0)
+                rect(0, 350, 90, 30)
+                fill(0)
+                textSize(18)
+                text("CPU fans", 1, 370)
+                
+                # red fans
+                fill(red_team)
+                noStroke()
+                for x in range(0, 61, 30):
+                    for y in range(205, 276, 70):
+                        ellipse(red_fan_pos.x + x, red_fan_pos.y + y - 205, fan_size.x, fan_size.y)
+                        ellipse(red_fan_head_pos.x + x, red_fan_head_pos.y + y - 205, head_size.x, head_size.y)
+                red_fan_pos.y += jump_speed_red
+                red_fan_head_pos.y += jump_speed_red
+                
+                # Blue, player fan sign
+                fill(255)
+                stroke(0)
+                rect(710, 350, 90, 30)
+                fill(0)
+                textSize(18)
+                text("Player fans", 711, 370)
+                
+                # blue fan variables
+                fill(blue_team)
+                noStroke()
+                for x in range(710, 771, 30):
+                    for y in range(205, 276, 70):
+                        ellipse(blue_fan_pos.x + x - 710, blue_fan_pos.y + y - 205, fan_size.x, fan_size.y)
+                        ellipse(blue_fan_head_pos.x + x - 710, blue_fan_head_pos.y + y - 205, head_size.x, head_size.y)
+            
+                blue_fan_pos.y += jump_speed_blue
+                blue_fan_head_pos.y += jump_speed_blue
+    
+                fill(0)
+                rect(325, 430, 150, 30)
+                fill(255)
+                rect(325, 430, time_bar, 30)
+                if comp_shoot is True:
+                    time_bar -= time_speed
+                    if time_bar <= 0:
+                        time_speed = 0
+                        cpu_shooting_status = True
+                        start_shooting = True
+                        cpu_shooting_status = True
+                
+                if start_shooting is True:
+                    # cpu random shot generation
+                    if cpu_shooting_status == True:
+                        if ball_power == 0:
+                            ball_y_movement_pos = 250
+                            if cpu_ball_pos.y >= ball_y_movement_pos:
+                                cpu_ball_pos.x += (cpu_shot_x * 8)
+                                cpu_ball_pos.y -= (cpu_shot_y * 8)
+                                cpu_ball_size *= 0.97
+                            else:
+                                cpu_shooting_status = False
+                        elif ball_power >= 1:
+                            if cpu_ball_pos.y >= ball_y_movement_pos:
+                                cpu_ball_pos.x += (cpu_shot_x * 8)
+                                cpu_ball_pos.y -= (cpu_shot_y * 8)
+                                cpu_ball_size *= 0.97
+                            else:
+                                cpu_shooting_status = False
+    
+                    if (cpu_ball_pos.x > net_pos.x + cpu_ball_radius and cpu_ball_pos.x < (net_pos.x + 204) - cpu_ball_radius and cpu_ball_pos.y > net_pos.y + cpu_ball_radius and cpu_ball_pos.y < (net_pos.y + 100) - cpu_ball_radius and abs(ball_to_gk_dist2) > (cpu_ball_radius + gk_radius) and click_number >= 1 and click_number <= 2 and cpu_shooting_status == False) or cpu_goal == True:
+                        # print("goal")
+                        fill(0)
+                        textSize(32)
+                        text("GOAL", 360, 200)
+                        gk_screen_goal = True
+                        cpu_goal = True
+                        if cpu_score_once == False:
+                            score_cpu += 1
+                            turn_gk += 1
+                            cpu_score_once = True
+                            # print(abs(ball_to_gk_dist2))
+                        else:
+                            # text("next", 700, 50)
+                            # next = True
+                            score_cpu += 0
+                    elif (cpu_ball_pos.x <= net_pos.x + cpu_ball_radius or cpu_ball_pos.x >= (net_pos.x + 204) - cpu_ball_radius or cpu_ball_pos.y <= net_pos.y + cpu_ball_radius or cpu_ball_pos.y >= (net_pos.y + 100) - cpu_ball_radius or abs(ball_to_gk_dist2) <= (cpu_ball_radius + gk_radius)) and click_number >= 1 and click_number <= 2 and cpu_shooting_status == False and cpu_goal == False:
+                        textSize(32)
+                        fill(0)
+                        text("MISS", 360, 200)
+                        gk_screen_miss = True
+                        if cpu_miss_once == False:
+                            turn_gk += 1
+                            cpu_miss_once = True
+                        # text("next", 700, 50)
+                        # next = True
+    
+                    # red fan jump
+                    if gk_screen_goal == True:
+                        if red_fan_pos.y > 250:
+                            gk_screen_goal = False
+                            jump_speed_red = 0
+                            fill(255)
+                            text("next", 700, 50)
+                            next = True
+                        elif red_fan_pos.y >= fan_jump:
+                            if jump_speed_red == 0:
+                                jump_speed_red = -1
+                        elif red_fan_pos.y < fan_jump:
+                            if jump_speed_red == -1:
+                                jump_speed_red = 1
+                    # blue fan jump        
+                    elif gk_screen_miss == True:
+                        if blue_fan_pos.y > 250:
+                            gk_screen_miss = False
+                            jump_speed_blue = 0
+                            fill(255)
+                            text("next", 700, 50)
+                            next = True
+                        elif blue_fan_pos.y >= fan_jump:
+                            if jump_speed_blue == 0:
+                                jump_speed_blue = -1
+                        elif blue_fan_pos.y < fan_jump:
+                            if jump_speed_blue == -1:
+                                jump_speed_blue = 1
+    
+                # cpu ball
+                fill(0)
+                stroke(0)
+                ellipse(cpu_ball_pos.x, cpu_ball_pos.y, cpu_ball_size, cpu_ball_size)
+                textSize(20)
+                text("Click(1)", 370, 420)
+                
+                # print(click_number)
+            # fill(255)
+            # rect(700, 0, 100, 50)
+            # fill(0)
+            # if mouseX > 700 and mouseY < 50:
+            #     back = 5
+            # else:
+            #     back = 0
+            # textSize(15 + back)
+            # text("<-- Back", 705, 40)
+    
+                fill(255)
+                textSize(20)
+                text("Player:" + str(score_player), 10, 20)
+                
+                fill(255)
+                textSize(20)
+                text("CPU:" + str(score_cpu), 730, 20)
+    
+                if play == True:
+                    if turn_gk == 3:
+                        if abs(score_player - score_cpu) >= 3:
+                            winner = max(score_player, score_cpu)
+                            end_game = True
+                            if max(score_player, score_cpu) is score_cpu:
+                                textSize(40)
+                                text("You Lose!", 300, 250)
+                            elif max(score_player, score_cpu) is score_player:
+                                textSize(40)
+                                text("You Win!", 300, 250)
+                    elif turn_gk == 4:
+                        if abs(score_player - score_cpu) >= 2:
+                            end_game = True
+                            winner = max(score_player, score_cpu)
+                            if max(score_player, score_cpu) is score_cpu:
+                                textSize(40)
+                                text("You Lose!", 300, 250)
+                            elif max(score_player, score_cpu) is score_player:
+                                textSize(40)
+                                text("You Win!", 300, 250)
+                    elif turn_gk >= 5:
+                        if abs(score_player - score_cpu) >= 1:
+                            winner = max(score_player, score_cpu)
+                            end_game = True
+                            if max(score_player, score_cpu) is score_cpu:
+                                textSize(40)
+                                text("You Lose!", 300, 250)
+                            elif max(score_player, score_cpu) is score_player:
+                                textSize(40)
+                                text("You Win!", 300, 250)
+    print(click_number)
 
 def mousePressed():
     global bad, good, height_point, height_speed
@@ -755,13 +725,14 @@ def mousePressed():
     global height_power, power_location, total_y_distance, distance_to_net
     global text_play, min_aim_point, min_shot_point, max_shot_point, max_aim_point
     global ball_pos, ball_size
-    global gk_pos, next, rotation_speed
+    global gk_pos, next, rotation_speed, hard_mode
     global player_shooting
     global time_bar, time_speed, comp_shoot
-    if play is True:
+    if choose_mode is True:
         if player_shooting is True:
             if click_number == 0:
                 height_speed = height_speed.mult(0)
+                click_number += 1
                 print(height_point.y)
                 if height_point.y >= 391:
                     height_power = PVector(
@@ -830,10 +801,13 @@ def mousePressed():
                     height_power = PVector(0, - 100)
 
                 # print(height_power)
-                click_number += 1
                 total_y_distance = distance_to_net - height_power.y
-    
-                rotation_speed = 0.014
+                if hard_mode == True:
+                    rotation_speed = 0.07
+                elif hard_mode == False:
+                    rotation_speed = 0.014
+                    
+                print(click_number)
         
                 # print(height_power.y)
                 # print(total_y_distance)
@@ -850,7 +824,10 @@ def mousePressed():
                 shot_x = relative_aim / total_y_distance
                 shot_y = shot_x / shot_x
                 click_number += 1
-                power_change = PVector(0, 5)
+                if hard_mode == True:
+                    power_change = PVector(0, 8)
+                else:
+                    power_change = PVector(0, 3)
                 
             elif click_number == 2:
                 power_change = power_change.mult(0)
@@ -888,9 +865,9 @@ def mouseClicked():
     global player_score_once, cpu_score_once, is_gk_diving, diving_side
     global diving_distance_x, diving_height, dive_x, dive_y, cpu_goal, height_point
     global gk_screen_goal, gk_screen_miss, jump_speed_red, jump_speed_blue, end_game
-    global red_fan_head_pos, blue_fan_head_pos, blue_fan_pos, red_fan_pos
+    global red_fan_head_pos, blue_fan_head_pos, blue_fan_pos, red_fan_pos, choose_mode
     global power_point, rect_height_point, rect_height_dim, cpu_miss_once, player_miss_once
-    global time_bar, comp_shoot, time_speed, score_player, score_cpu
+    global time_bar, comp_shoot, time_speed, score_player, score_cpu, hard_mode
     
     # instructions
     if instruction is False:
@@ -905,6 +882,24 @@ def mouseClicked():
     if play is False:
         if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY < 200:
             play = True
+            
+            
+ # toooooooo lowwwwwwwwww       
+    elif choose_mode is False:
+        if mouseX > 100 and mouseX < 250 and mouseY > 200 and mouseY < 250:
+            hard_mode = False
+            choose_mode = True
+            click_number = 0
+            height_speed = PVector(0, 5)    
+            
+        elif mouseX > 100 and mouseX < 250 and mouseY > 300 and mouseY < 350:
+            hard_mode = True
+            choose_mode = True
+            click_number = 0
+            height_speed = PVector(0, 15)
+
+        
+    
     if player_shooting is True and next is True and mouseX > 700 and mouseX < 800 and mouseY > 0 and mouseY < 100:
         player_shooting = False
         cpu_ball_pos = PVector(400, 385)
@@ -940,6 +935,8 @@ def mouseClicked():
             end_game = False
             score_player = 0
             score_cpu = 0
+            choose_mode = False
+            hard_mode = False
 
     elif player_shooting is False and next is True and mouseX > 700 and mouseX < 800 and mouseY > 0 and mouseY < 100:
         player_shooting = True
@@ -969,12 +966,5 @@ def mouseClicked():
             end_game = False
             score_player = 0
             score_cpu = 0
-    
-    global leader_boards
-    
-    if leader_boards is False:
-        if mouseX > 100 and mouseX < 270 and mouseY > 200 and mouseY < 250:
-            leader_boards = True
-    if leader_boards is True:
-        if mouseX > 700 and mouseX < 800 and mouseY > 400 and mouseY < 500:
-            leader_boards = False
+            choose_mode = False
+            hard_mode = False
