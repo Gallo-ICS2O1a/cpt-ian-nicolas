@@ -1,4 +1,3 @@
-# Added instructions to game
 # Menu
 text_instruction = 30
 text_play = 30
