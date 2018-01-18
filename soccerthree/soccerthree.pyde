@@ -132,17 +132,19 @@ def draw():
     global player_shooting, cpu_shooting
     global cpu_shooting_status, hard_mode, choose_mode
     global time_bar, time_speed, go, comp_shoot
-
-    background(filler)
+    background(74, 140, 97)
+    image(soccer_background, 0, 10)
+    fill(255, 255, 255, 160)
+    rect(0, 0, 800, 500)
     fill(0)
     textSize(50)
-    text("Menu:", 350, 100)
+    text("Soccer Shoot Out", 220, 100)
 
     textSize(text_instruction)
     text("Instructions", 100, 150)
     textSize(text_play)
     text("Play", 100, 200)
-
+    
     # instruction
     if mouseX > 100 and mouseX < 270 and mouseY > 100 and mouseY < 150:
         text_instruction = 50
@@ -182,9 +184,21 @@ def draw():
             background(255)
             textSize(50)
             text("Difficulty", 300, 100)
-            
-            textSize(30)
+
+            # mode choice
+            if mouseX > 100 and mouseX < 200 and mouseY > 100 and mouseY < 150:
+                easy_text = 10
+            else:
+                easy_text = 0
+            textSize(30 + easy_text)
             text("Easy", 100, 150)
+            if mouseX > 100 and mouseX < 200 and mouseY > 150 and mouseY < 200:
+                hard_text = 10
+            else:
+                hard_text = 0
+            textSize(30 + hard_text)
+            textSize(30 + hard_text)
+
             text("Hard", 100, 200)
         
             # print(mouseX, mouseY)
@@ -208,10 +222,6 @@ def draw():
                 
                 background(255)
                 print(turn_player, turn_gk)
-                # sky
-                noStroke()
-                fill(0, 100, 255)
-                rect(sky_pos.x, sky_pos.y, 800, 200)
                 
                 # fans.resize(0, 280)
                 # image(fans, 0, 0)
@@ -247,11 +257,15 @@ def draw():
                 noStroke()
                 rect(250, 400, 300, 65)
                 # stroke(0)
-                
-                
+
+                # sky
+                noStroke()
+                fill(0, 100, 255)
+                rect(sky_pos.x, sky_pos.y, 800, 200)
+                                
                 ad.resize(0, 40)
-                for i in range(0, width, 80):
-                    image(ad, i, 160)
+                # for i in range(0, width, 80):
+                    # image(ad, i, 160)
     
                 # Power Arrow
                 fill(0)
@@ -511,8 +525,8 @@ def draw():
                 rect(sky_pos.x, sky_pos.y, 800, 200)
                 
                 ad.resize(0, 40)
-                for x in range(0, width, 80):
-                    image(ad, x, 160)
+                # for x in range(0, width, 80):
+                    # image(ad, x, 160)
     
                 # net
                 fill(255)
@@ -882,17 +896,15 @@ def mouseClicked():
     if play is False:
         if mouseX > 100 and mouseX < 160 and mouseY > 150 and mouseY < 200:
             play = True
-            
-            
- # toooooooo lowwwwwwwwww       
+
     elif choose_mode is False:
-        if mouseX > 100 and mouseX < 250 and mouseY > 200 and mouseY < 250:
+        if mouseX > 100 and mouseX < 300 and mouseY > 100 and mouseY < 150:
             hard_mode = False
             choose_mode = True
             click_number = 0
             height_speed = PVector(0, 5)    
             
-        elif mouseX > 100 and mouseX < 250 and mouseY > 300 and mouseY < 350:
+        elif mouseX > 100 and mouseX < 300 and mouseY > 150 and mouseY < 200:
             hard_mode = True
             choose_mode = True
             click_number = 0
