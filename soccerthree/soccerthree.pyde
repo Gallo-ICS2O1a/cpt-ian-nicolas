@@ -35,7 +35,7 @@ power_miss = 230  # ball power if shot is too short
 bad = color(230, 17, 17)
 good = color(17, 230, 34)
 height_point = PVector(150, 100)
-height_speed  = PVector(0, 0)
+height_speed = PVector(0, 0)
 
 # Aim Bar
 aim_point = PVector(400, 390)
@@ -110,10 +110,14 @@ turn_gk = 0
 # net
 net_pos = PVector(298, 100)
 
+# time bar
 time_bar = 150
 time_speed = 1
-# go = False
 comp_shoot = False
+
+# exit box
+exit_box = PVector(0, 425)
+exit_game = False
 
 
 def setup():
@@ -179,6 +183,7 @@ def draw():
         text_play = 50
     else:
         text_play = 30
+    print(play)
     if play is True:
         if choose_mode is False:
             background(255)
@@ -215,7 +220,7 @@ def draw():
                 global diving_distance_x, is_gk_diving, diving_side, diving_height
                 global grass_pos, sky_pos, power_miss, end_game
                 global player_score_once, player_miss_once
-                global next, score_player, score_cpu
+                global next, score_player, score_cpu, exit_game, exit_box
                 ball_to_gk_vect = PVector.sub(gk_pos, ball_pos)
                 ball_to_gk_dist = ball_to_gk_vect.mag()
                 ball_radius = ball_size / 2
@@ -267,7 +272,17 @@ def draw():
                 # for i in range(0, width, 80):
                     # image(ad, i, 160)
     
+                # exit box
+                fill(255)
+                stroke(0)
+                strokeWeight(1)
+                rect(exit_box.x, exit_box.y, 75, 75)
+                fill(0)
+                textSize(20)
+                text("Exit", 15, 470)
+                
                 # Power Arrow
+                noStroke()
                 fill(0)
                 textSize(20)
                 text("Power(3)", power_point.x - 45, 430)
@@ -478,8 +493,8 @@ def draw():
                 global gk_screen_goal, gk_screen_miss, click_number, cpu_goal, end_game
                 global cpu_ball_pos, fan_size, blue_fan_pos, fan_jump, red_fan_pos
                 global cpu_ball_size , cpu_ball_radius, cpu_score_once, score_player, score_cpu
-                global comp_shoot, time_bar, time_speed
-                
+                global comp_shoot, time_bar, time_speed, exit_box, exit_game
+
                 cpu_ball_radius = cpu_ball_size / 2
                 ball_to_gk_vect2 = PVector.sub(cpu_ball_pos, dive_pos)
                 ball_to_gk_dist2 = ball_to_gk_vect2.mag()
@@ -522,7 +537,16 @@ def draw():
                 ad.resize(0, 40)
                 # for x in range(0, width, 80):
                     # image(ad, x, 160)
-    
+                
+                 # exit box
+                fill(255)
+                stroke(0)
+                strokeWeight(1)
+                rect(exit_box.x, exit_box.y, 75, 75)
+                fill(0)
+                textSize(20)
+                text("Exit", 15, 470)
+                
                 # net
                 fill(255)
                 stroke(0)
@@ -848,12 +872,12 @@ def mouseClicked():
     global instruction, play, cpu_ball_pos, cpu_ball_size, dive_pos, ball_power, ball_distance
     global click_number, power_change, ball_size, start_shooting, cpu_shot_x, cpu_shot_y
     global player_shooting, ball_pos, gk_pos, height_speed, rotation_speed
-    global player_score_once, cpu_score_once, is_gk_diving, diving_side
+    global player_score_once, cpu_score_once, is_gk_diving, diving_side, turn_player, turn_gk
     global diving_distance_x, diving_height, dive_x, dive_y, cpu_goal, height_point
     global gk_screen_goal, gk_screen_miss, jump_speed_red, jump_speed_blue, end_game
     global red_fan_head_pos, blue_fan_head_pos, blue_fan_pos, red_fan_pos, choose_mode
     global power_point, rect_height_point, rect_height_dim, cpu_miss_once, player_miss_once
-    global time_bar, comp_shoot, time_speed, score_player, score_cpu, hard_mode
+    global time_bar, comp_shoot, time_speed, score_player, score_cpu, hard_mode, exit_game
     
     # instructions
     if instruction is False:
@@ -881,6 +905,10 @@ def mouseClicked():
             choose_mode = True
             click_number = 0
             height_speed = PVector(0, 15)
+            
+    if play is True:
+        if mouseX > 0 and mouseX < 75 and mouseY > 425 and mouseY < 500:
+            exit_game = True
 
         
     
@@ -921,7 +949,10 @@ def mouseClicked():
             score_cpu = 0
             choose_mode = False
             hard_mode = False
-
+            turn_player = 0
+            turn_gk = 0
+            instrction = False
+    
     elif player_shooting is False and next is True and mouseX > 700 and mouseX < 800 and mouseY > 0 and mouseY < 100:
         player_shooting = True
         click_number = 0
@@ -952,3 +983,67 @@ def mouseClicked():
             score_cpu = 0
             choose_mode = False
             hard_mode = False
+            turn_player = 0
+            turn_gk = 0
+            instruction = False
+            
+    if exit_game is True:
+        player_shooting = True
+        click_number = 0
+        player_score_once = False
+        ball_pos = PVector(400, 385)
+        gk_pos = PVector(400, 175)
+        height_speed = PVector(0, 10)
+        height_point = PVector(150, 100)
+        rotation_speed = 0
+        power_change = PVector(0, 0)
+        ball_size = 30
+        next = False
+        gk_pos = PVector(400, 175)  # gk is goal keeper
+        is_gk_diving = int(random(0, 10))
+        diving_side = int(random(0, 2))
+        diving_distance_x = random(1, 74)
+        diving_height = random(1, 52)
+        dive_x = diving_distance_x / diving_height
+        dive_y = diving_distance_x / diving_distance_x
+        power_point = PVector(650, 250)
+        rect_height_point = PVector(power_point.x - 7.5, power_point.y + 15)
+        rect_height_dim = PVector(15, 265 - power_point.y - 15)
+        player_miss_once = False
+        cpu_ball_pos = PVector(400, 385)
+        dive_pos = PVector(400, 175)
+        cpu_ball_size = 30
+        cpu_score_once = False
+        dive_choice = True
+        start_shooting = False
+        cpu_shooting_status = False
+        ball_x_movement_pos = random(290, 510)
+        ball_y_movement_pos = random(95, 193)
+        ball_power = int(random(0, 16))
+        ball_distance = PVector(ball_x_movement_pos - cpu_ball_pos.x, ball_y_movement_pos - cpu_ball_pos.y)
+        cpu_shot_x = ball_distance.x / ball_distance.y
+        cpu_shot_y = ball_distance.x / ball_distance.x
+        cpu_goal = False
+        gk_screen_goal = False
+        gk_screen_miss = False
+        jump_speed_red = 0
+        jump_speed_blue = 0
+        red_fan_head_pos = PVector(15, 215)
+        blue_fan_head_pos = PVector(725, 215)
+        red_fan_pos = PVector(15, 250)
+        blue_fan_pos = PVector(725, 250)
+        cpu_miss_once = False
+        comp_shoot = False
+        time_bar = 150
+        time_speed = 1
+        play = False
+        end_game = False
+        score_player = 0
+        score_cpu = 0
+        choose_mode = False
+        hard_mode = False
+        turn_player = 0
+        turn_gk = 0
+        instruction = False
+        exit_game = False
+        menu = True
