@@ -830,7 +830,7 @@ def mousePressed():
             elif click_number == 1:
                 rotation_speed = 0
                 aim_x = 400 + aim_vector.x
-                aim = (aim_x - min_aim_point) * \ ((aim_point.x - min_shot_point) / (aim_point.x - min_aim_point))
+                aim = (aim_x - min_aim_point) * ((aim_point.x - min_shot_point) / (aim_point.x - min_aim_point))
                 # print(aim)
                 relative_aim = aim - 400
                 shot_x = relative_aim / total_y_distance
