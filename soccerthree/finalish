@@ -1046,6 +1046,4 @@ def mouseClicked():
         turn_gk = 0
         instruction = False
         exit_game = False
-        
-            
-    
+        menu = True
