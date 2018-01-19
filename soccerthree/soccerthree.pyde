@@ -183,11 +183,14 @@ def draw():
         text_play = 50
     else:
         text_play = 30
-    print(play)
+    # print(play)
     if play is True:
         if choose_mode is False:
-            background(255)
+            image(soccer_background, 0, 0)
+            fill(255, 255, 255, 160)
+            rect(0, 0, 800, 500)
             textSize(50)
+            fill(0)
             text("Difficulty", 300, 100)
 
             # mode choice
@@ -226,7 +229,7 @@ def draw():
                 ball_radius = ball_size / 2
                 
                 background(255)
-                print(turn_player, turn_gk)
+                # print(turn_player, turn_gk)
                 
                 # fans.resize(0, 280)
                 # image(fans, 0, 0)
@@ -411,7 +414,7 @@ def draw():
                 if ball_pos.y <= 185 and ball_pos.y > power_location + height_power.y and power_status == False:
                     height_status = True
                     # print(ball_to_gk_dist)
-                    print(abs(ball_to_gk_dist), ball_radius + gk_radius)
+                    # print(abs(ball_to_gk_dist), ball_radius + gk_radius)
                     if height_status == True:
                         ball_pos.y -= shot_y * 5
                         ball_pos.x += shot_x * 5
@@ -748,7 +751,6 @@ def draw():
                             elif max(score_player, score_cpu) is score_player:
                                 textSize(40)
                                 text("You Win!", 300, 250)
-    print(click_number)
 
 def mousePressed():
     global bad, good, height_point, height_speed
@@ -766,7 +768,7 @@ def mousePressed():
             if click_number == 0:
                 height_speed = height_speed.mult(0)
                 click_number += 1
-                print(height_point.y)
+                # print(height_point.y)
                 if height_point.y >= 391:
                     height_power = PVector(0, (-(power_location - (115 + (3.5 * 20)))))
                 elif height_point.y >= 381:
@@ -819,7 +821,7 @@ def mousePressed():
                 elif hard_mode == False:
                     rotation_speed = 0.014
                     
-                print(click_number)
+                # print(click_number)
         
                 # print(height_power.y)
                 # print(total_y_distance)
@@ -829,7 +831,7 @@ def mousePressed():
                 rotation_speed = 0
                 aim_x = 400 + aim_vector.x
                 aim = (aim_x - min_aim_point) * \ ((aim_point.x - min_shot_point) / (aim_point.x - min_aim_point))
-                print(aim)
+                # print(aim)
                 relative_aim = aim - 400
                 shot_x = relative_aim / total_y_distance
                 shot_y = shot_x / shot_x
@@ -854,7 +856,7 @@ def mousePressed():
                     click_number += 1
             if dive_choice is True:
                 if mouseX > 298 and mouseX < 298 + 204 and mouseY > 100 and mouseY < 200:
-                    print(mouseX, mouseY)
+                    # print(mouseX, mouseY)
                     dive_pos = PVector(mouseX, mouseY)
                     dive_choice = False
                     click_number += 1
