@@ -778,8 +778,7 @@ def mousePressed():
                 if height_point.y >= 391:
                     height_power = PVector(0, (-(power_location - (115 + (3.5 * 20)))))
                 elif height_point.y >= 381:
-                    height_power = PVector(0, 
-                                    (-(power_location - (115 + (3.5 * 19)))))
+                    height_power = PVector(0, (-(power_location - (115 + (3.5 * 19)))))
                 elif height_point.y >= 371:
                     height_power = PVector(0, (-(power_location - (115 + (3.5 * 18)))))
                 elif height_point.y >= 361:
