@@ -411,8 +411,7 @@ def draw():
                 if (ball_pos.y <= 185 and
                     ball_pos.y > power_location + height_power.y and
                         power_status is False):
-                    height_status = True
-                    
+                    height_status = True  
                     if height_status is True:
                         ball_pos.y -= shot_y * 5
                         ball_pos.x += shot_x * 5
@@ -632,7 +631,7 @@ def draw():
                         if ball_power == 0:
                             ball_y_movement_pos = 250
                             if cpu_ball_pos.y >= ball_y_movement_pos:
-                                if hard_mode == True:
+                                if hard_mode is True:
                                     cpu_ball_pos.x += (cpu_shot_x * 10)
                                     cpu_ball_pos.y -= (cpu_shot_y * 10)
                                     cpu_ball_size *= 0.97
@@ -644,7 +643,7 @@ def draw():
                                 cpu_shooting_status = False
                         elif ball_power >= 1:
                             if cpu_ball_pos.y >= ball_y_movement_pos:
-                                if hard_mode == True:
+                                if hard_mode is True:
                                     cpu_ball_pos.x += (cpu_shot_x * 10)
                                     cpu_ball_pos.y -= (cpu_shot_y * 10)
                                     cpu_ball_size *= 0.97
