@@ -411,7 +411,7 @@ def draw():
                 if (ball_pos.y <= 185 and
                     ball_pos.y > power_location + height_power.y and
                         power_status is False):
-                    height_status = True  
+                    height_status = True
                     if height_status is True:
                         ball_pos.y -= shot_y * 5
                         ball_pos.x += shot_x * 5
