@@ -566,6 +566,7 @@ def draw():
                     textSize(20)
                     text("Click(2)", 370, 140)
                 elif dive_choice is False:
+                    noStroke()
                     fill(0, 0, 200)
                     ellipse(dive_pos.x, dive_pos.y, gk_size, gk_size)
 
