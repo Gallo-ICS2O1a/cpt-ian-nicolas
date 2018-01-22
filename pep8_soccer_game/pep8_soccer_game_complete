@@ -991,8 +991,10 @@ def mouseClicked():
             hard_mode = False
             turn_player = 0
             turn_gk = 0
-            instrction = False
+            instruction = False
             player_shooting = True
+            ball_pos = PVector(400, 385)
+            ball_size = 30
 
     elif (player_shooting is False and next is True and mouseX > 700 and
             mouseX < 800 and mouseY > 0 and mouseY < 100):
